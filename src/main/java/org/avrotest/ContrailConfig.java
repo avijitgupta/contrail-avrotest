@@ -234,7 +234,7 @@ public class ContrailConfig
 		//Present working directory
 		String pwd = System.getProperty("user.dir");
 	
-		XMLConfiguration config = new XMLConfiguration("/home/hduser/workspace/contrailPlus/config/config.xml");	
+		XMLConfiguration config = new XMLConfiguration("/home/avijit/workspace/AvroTest/config/config.xml");	
 		Flash_Home = config.getString("setup.flash_home");
 		Quake_Home = config.getString("setup.quake_home");
 		Hadoop_Home = config.getString("setup.hadoop_home");

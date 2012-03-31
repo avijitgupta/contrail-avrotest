@@ -1,0 +1,19 @@
+Loading required package: splines
+Loading required package: stats4
+
+Attaching package: 'VGAM'
+
+The following object(s) are masked from 'package:splines':
+
+    bs, ns
+
+The following object(s) are masked from 'package:stats':
+
+    biplot, case.names, coefficients, df.residual, fitted,
+    fitted.values, formula, poly, residuals, variable.names, weights
+
+The following object(s) are masked from 'package:base':
+
+    identity, print, scale.default
+
+There were 20 warnings (use warnings() to see them)

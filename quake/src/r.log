@@ -1,0 +1,28 @@
+Loading required package: splines
+Loading required package: stats4
+
+Attaching package: 'VGAM'
+
+The following object(s) are masked from 'package:splines':
+
+    bs, ns
+
+The following object(s) are masked from 'package:stats':
+
+    biplot, case.names, coefficients, df.residual, fitted,
+    fitted.values, formula, poly, residuals, variable.names, weights
+
+The following object(s) are masked from 'package:base':
+
+    identity, print, scale.default
+
+Warning messages:
+1: In log(apply(kmers.probs, 1, sum)) : NaNs produced
+2: In log(apply(kmers.probs, 1, sum)) : NaNs produced
+3: In log(apply(kmers.probs, 1, sum)) : NaNs produced
+4: In log(apply(kmers.probs, 1, sum)) : NaNs produced
+5: In log(apply(kmers.probs, 1, sum)) : NaNs produced
+6: In log(apply(kmers.probs, 1, sum)) : NaNs produced
+7: In log(apply(kmers.probs, 1, sum)) : NaNs produced
+8: In log(apply(kmers.probs, 1, sum)) : NaNs produced
+9: In log(apply(kmers.probs, 1, sum)) : NaNs produced

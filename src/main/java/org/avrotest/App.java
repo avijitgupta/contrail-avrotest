@@ -28,22 +28,28 @@ public class App
     	   //TestWordCount rec = new TestWordCount();
     	
     	///Kmer counting Run
+    	   ContrailConfig.readXMLConfig();
     	boolean kmercount =false;
     	boolean avroToNonAvroPartFile = false;
     	boolean calculateCutOff = true;
     	if(kmercount)
     	{
     		kmerCounter k = new kmerCounter();
-    		k.run("outputfq", "kmer_count", 13);
+    		k.run("outputfq", "ContrailPlus/kmer_count", 13);
     	}
     	   ///Count File Creation from Avro
     	
     	if(avroToNonAvroPartFile)
     	{
     		convertPartFileToNonAvro conv = new convertPartFileToNonAvro();
-    		conv.run("kmer_count", "count_file");
+    		conv.run("ContrailPlus/kmer_count", "ContrailPlus/quake_non_avro_count_file");
     	}  
     	
+    	if(calculateCutOff)
+    	{
+    		int cutoff = cutOffCalculation.calculateCutoff();
+    		System.out.print("Cutoff= "+cutoff);
+    	}
     	
     	
     	//rec.run("inputfq","outputfq");

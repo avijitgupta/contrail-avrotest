@@ -15,13 +15,16 @@ public class cutOffCalculation {
 		File fp;
 		
 		//We only need one part file to calculate the cutoff..
-		String Hadoop_Kmer_Output0 = ContrailConfig.Quake_KmerCount+"/part-r-00000";
+		String Hadoop_Kmer_Output0 = ContrailConfig.Quake_KmerCount+"/part-00000";
 		
-		File f = new File(ContrailConfig.Quake_Data+"/part-r-00000");
+		File f = new File(ContrailConfig.Quake_Data+"/part-00000");
 		if (f.exists()) f.delete();
 		
 		String command = Hadoop_Home+"bin/hadoop dfs -copyToLocal "+Hadoop_Kmer_Output0+" "+Kmer_Directory;
 		//copy the part file to client node's Quake Data directory
+		
+		System.out.println("Cutoff Calculation copy: "+ command);
+		
 		
 		String s;
 		Process p = Runtime.getRuntime().exec(command);
@@ -39,7 +42,9 @@ public class cutOffCalculation {
 	                  	System.out.println(s);
 	        }
 
-		String command2 = Quake_Path+"bin/cov_model.py --int "+Kmer_Directory+"/part-r-00000";
+		String command2 = Quake_Path+"bin/cov_model.py --int "+Kmer_Directory+"/part-00000";
+		
+		System.out.println("Cutoff Calculation: "+ command2);
 		
 		p = Runtime.getRuntime().exec(command2);
 		
@@ -55,7 +60,7 @@ public class cutOffCalculation {
             {
             		String ss = str.nextToken();
             		cutoff = Integer.parseInt(ss);
-            		//System.out.println("testcutoff: "+ss+"Cutoff "+cutoff);
+            		System.out.println("testcutoff: "+ss+"Cutoff "+cutoff);
             		break;
             }
         
