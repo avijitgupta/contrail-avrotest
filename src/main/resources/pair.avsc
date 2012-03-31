@@ -1,0 +1,9 @@
+{
+ "type":"record",
+ "name":"pair",
+ "doc":"An edge between a pair of vertices",
+ "fields": [
+	  { "name":"fromv","type":"int"},
+	  { "name":"tov", "type":"int"}
+	]
+}

@@ -1,0 +1,11 @@
+{
+"namespace": "org.avrotest",
+ "type":"record",
+ "name":"fastqrecord",
+ "doc":"A Fastq Read",
+ "fields": [
+	  { "name":"id","type":"string"},
+	  { "name":"read", "type":"string"},
+	  { "name":"qvalue", "type":"string"}
+	]
+}
