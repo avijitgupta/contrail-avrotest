@@ -91,7 +91,7 @@ protected int run(String inputPath, String outputPath) throws Exception {
  
   
   JobConf conf = new JobConf(kmerCounter.class);
-  conf.setJobName("testing ");
+  conf.setJobName("Convert part file to non avro");
 
   FileInputFormat.addInputPath(conf, new Path(inputPath));
   FileOutputFormat.setOutputPath(conf, new Path(outputPath));

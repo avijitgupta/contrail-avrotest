@@ -34,11 +34,12 @@ public class App
     	boolean avroToNonAvroPartFile = false;
     	boolean calculateCutOff = false;
     	boolean pruneCountFile = false;
-    	
+    	boolean calculateBitHash = true;
+    	int K =13;
     	if(kmercount)
     	{
     		kmerCounter k = new kmerCounter();
-    		k.run("outputfq", "ContrailPlus/quake_kmer_count", 13);
+    		k.run("outputfq", "ContrailPlus/quake_kmer_count", K);
     	}
     	   ///Count File Creation from Avro
     	
@@ -53,13 +54,18 @@ public class App
     		ContrailConfig.cutoff = cutOffCalculation.calculateCutoff();
     		System.out.print("Cutoff= "+ContrailConfig.cutoff);
     	}
-    	
+    	ContrailConfig.cutoff = 3; /// Remove this after testing
     	if(pruneCountFile)
     	{
             FilterGlobalCountFile.FilterKmers(ContrailConfig.Quake_KmerCount,ContrailConfig.Quake_Filtered_KmerCount,ContrailConfig.cutoff);
 
     	}
     	//////Working till here!
+    	
+    	if(calculateBitHash)
+    	{
+    		localBitHash.bitHashlocal(ContrailConfig.Quake_Filtered_KmerCount, ContrailConfig.junkPath, K, ContrailConfig.cutoff);
+    	}
     	//rec.run("inputfq","outputfq");
     	
        } catch (Exception e) {

@@ -69,7 +69,7 @@ public class FilterGlobalCountFile {
     public static void FilterKmers(String inputPath, String outputPath, long cutoff) throws Exception {
 
     	JobConf conf = new JobConf(kmerCounter.class);
-        conf.setJobName("testing ");
+        conf.setJobName("Filter Kmer Counts ");
 
         FileInputFormat.addInputPath(conf, new Path(inputPath));
         FileOutputFormat.setOutputPath(conf, new Path(outputPath));

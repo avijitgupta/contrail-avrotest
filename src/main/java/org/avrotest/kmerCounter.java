@@ -98,7 +98,7 @@ public class kmerCounter
    
     
     JobConf conf = new JobConf(kmerCounter.class);
-    conf.setJobName("testing ");
+    conf.setJobName("Kmer Counter ");
 
     FileInputFormat.addInputPath(conf, new Path(inputPath));
     FileOutputFormat.setOutputPath(conf, new Path(outputPath));

@@ -248,7 +248,8 @@ void bithash::binary_file_output_2(char* outf) {
       if(bits[i*64 + j])
         temp |= flag;
     }
-    ofs<<i<<"\t"<<temp<<"\n";
+    ofs<<i<<"\t"<<temp;
+    ofs<<"\n";
   }
   ofs.close();
 }
