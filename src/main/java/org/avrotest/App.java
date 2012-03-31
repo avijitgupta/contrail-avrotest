@@ -26,8 +26,24 @@ public class App
     	//Hadooper.Run(outputPath, inFile, outFile, schema);
        
     	   //TestWordCount rec = new TestWordCount();
-    	kmerCounter k = new kmerCounter();
-    	k.run("outputfq", "blank", 13);
+    	
+    	///Kmer counting Run
+    	boolean kmercount =false;
+    	boolean avroToNonAvroPartFile = false;
+    	boolean calculateCutOff = true;
+    	if(kmercount)
+    	{
+    		kmerCounter k = new kmerCounter();
+    		k.run("outputfq", "kmer_count", 13);
+    	}
+    	   ///Count File Creation from Avro
+    	
+    	if(avroToNonAvroPartFile)
+    	{
+    		convertPartFileToNonAvro conv = new convertPartFileToNonAvro();
+    		conv.run("kmer_count", "count_file");
+    	}  
+    	
     	
     	
     	//rec.run("inputfq","outputfq");

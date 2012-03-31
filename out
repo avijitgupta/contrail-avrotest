@@ -1,8 +1,7 @@
 [INFO] Scanning for projects...
 [WARNING] 
 [WARNING] Some problems were encountered while building the effective model for org.avrotest:AvroTest:jar:1.0-SNAPSHOT
-[WARNING] 'build.plugins.plugin.version' for org.apache.avro:avro-maven-plugin is missing. @ line 90, column 13
-[WARNING] 'build.plugins.plugin.version' for org.codehaus.mojo:build-helper-maven-plugin is missing. @ line 110, column 17
+[WARNING] 'build.plugins.plugin.version' for org.codehaus.mojo:build-helper-maven-plugin is missing. @ line 111, column 17
 [WARNING] 
 [WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
 [WARNING] 
@@ -18,15 +17,14 @@
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time: 0.535s
-[INFO] Finished at: Fri Mar 30 16:27:41 EDT 2012
+[INFO] Total time: 0.429s
+[INFO] Finished at: Sat Mar 31 12:10:15 EDT 2012
 [INFO] Final Memory: 3M/245M
 [INFO] ------------------------------------------------------------------------
 [INFO] Scanning for projects...
 [WARNING] 
 [WARNING] Some problems were encountered while building the effective model for org.avrotest:AvroTest:jar:1.0-SNAPSHOT
-[WARNING] 'build.plugins.plugin.version' for org.apache.avro:avro-maven-plugin is missing. @ line 90, column 13
-[WARNING] 'build.plugins.plugin.version' for org.codehaus.mojo:build-helper-maven-plugin is missing. @ line 110, column 17
+[WARNING] 'build.plugins.plugin.version' for org.codehaus.mojo:build-helper-maven-plugin is missing. @ line 111, column 17
 [WARNING] 
 [WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
 [WARNING] 
@@ -37,11 +35,11 @@
 [INFO] Building Avro Testing 1.0-SNAPSHOT
 [INFO] ------------------------------------------------------------------------
 [INFO] 
-[INFO] --- avro-maven-plugin:1.6.3:protocol (default) @ AvroTest ---
+[INFO] --- avro-maven-plugin:1.6.1:protocol (default) @ AvroTest ---
 [INFO] 
-[INFO] --- avro-maven-plugin:1.6.3:schema (default) @ AvroTest ---
+[INFO] --- avro-maven-plugin:1.6.1:schema (default) @ AvroTest ---
 [INFO] 
-[INFO] --- avro-maven-plugin:1.6.3:idl-protocol (default) @ AvroTest ---
+[INFO] --- avro-maven-plugin:1.6.1:idl-protocol (default) @ AvroTest ---
 [INFO] 
 [INFO] --- build-helper-maven-plugin:1.7:add-source (add-source) @ AvroTest ---
 [INFO] Source directory: /home/avijit/workspace/AvroTest/target/generated-sources/avro added.
@@ -52,19 +50,18 @@
 [INFO] Copying 3 resources
 [INFO] 
 [INFO] --- maven-compiler-plugin:2.3.2:compile (default-compile) @ AvroTest ---
-[INFO] Compiling 14 source files to /home/avijit/workspace/AvroTest/target/classes
+[INFO] Compiling 15 source files to /home/avijit/workspace/AvroTest/target/classes
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time: 5.481s
-[INFO] Finished at: Fri Mar 30 16:27:48 EDT 2012
+[INFO] Total time: 4.127s
+[INFO] Finished at: Sat Mar 31 12:10:20 EDT 2012
 [INFO] Final Memory: 11M/245M
 [INFO] ------------------------------------------------------------------------
 [INFO] Scanning for projects...
 [WARNING] 
 [WARNING] Some problems were encountered while building the effective model for org.avrotest:AvroTest:jar:1.0-SNAPSHOT
-[WARNING] 'build.plugins.plugin.version' for org.apache.avro:avro-maven-plugin is missing. @ line 90, column 13
-[WARNING] 'build.plugins.plugin.version' for org.codehaus.mojo:build-helper-maven-plugin is missing. @ line 110, column 17
+[WARNING] 'build.plugins.plugin.version' for org.codehaus.mojo:build-helper-maven-plugin is missing. @ line 111, column 17
 [WARNING] 
 [WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
 [WARNING] 
@@ -3274,7 +3271,7 @@
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time: 7.056s
-[INFO] Finished at: Fri Mar 30 16:27:56 EDT 2012
-[INFO] Final Memory: 7M/324M
+[INFO] Total time: 6.685s
+[INFO] Finished at: Sat Mar 31 12:10:29 EDT 2012
+[INFO] Final Memory: 7M/331M
 [INFO] ------------------------------------------------------------------------

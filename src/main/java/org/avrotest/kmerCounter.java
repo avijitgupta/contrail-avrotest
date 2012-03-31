@@ -46,7 +46,9 @@ import org.apache.hadoop.util.ToolRunner;
 
 public class kmerCounter
 {       
-        
+        /*The input schema to this mapper is the normal fastq schema
+         * id, read, qvalue
+         */
 	    public static class KmerCounterMapper extends AvroMapper<fastqrecord, Pair<Utf8, Long>>        
         {
                 private static long K = 0;
@@ -104,11 +106,9 @@ public class kmerCounter
     fastqrecord read = new fastqrecord();
     AvroJob.setInputSchema(conf, read.getSchema());
     AvroJob.setOutputSchema(conf, new Pair<Utf8,Long>(new Utf8(""), 0L).getSchema());
-    //AvroJob.setMapOutputSchema(conf, new Pair<Utf8,Long>(new Utf8(""), 0L).getSchema());
     AvroJob.setMapperClass(conf, KmerCounterMapper.class);
     AvroJob.setReducerClass(conf, KmerCounterReducer.class);
-    //conf.setNumReduceTasks(0);
-    // Delete the output directory if it exists already
+       // Delete the output directory if it exists already
     Path out_path = new Path(outputPath);
     if (FileSystem.get(conf).exists(out_path)) {
       FileSystem.get(conf).delete(out_path, true);  
