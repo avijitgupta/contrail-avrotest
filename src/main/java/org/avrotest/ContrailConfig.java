@@ -89,6 +89,7 @@ public class ContrailConfig
 	public static String BitHash_Output = null;
 	public static String BitHash_Local_Temp = null;
 	public static String Quake_Mates_Out = null;
+	public static String Non_Avro_Count_File = null; //--->changed
 ////////////////////////////////////////////////////
 	
 	// hadoop options
@@ -136,7 +137,7 @@ public class ContrailConfig
 	// low cov
 	public static float LOW_COV_THRESH  = 5.0f;
 	public static long  MAX_LOW_COV_LEN = -2;
-	static int cutoff;
+	public static long cutoff; //--->changed
 	
 	// threads
 	public static long  MIN_THREAD_WEIGHT = 5;
@@ -251,7 +252,7 @@ public class ContrailConfig
 		Singles = config.getString("hdfs_in_data.singles");
 		Quake_Singles_Out = config.getString("hdfs_out_data.quake_singles_out");
 		Quake_Final_Out = config.getString("hdfs_out_data.quake_final_out");
-		
+		Non_Avro_Count_File = config.getString("hdfs_out_data.non_avro_count_part");//--->changed
 		Flash_Node_In = config.getString("local_data.flash_input");
 		
 		Flash_Node_Out = config.getString("local_data.flash_output");

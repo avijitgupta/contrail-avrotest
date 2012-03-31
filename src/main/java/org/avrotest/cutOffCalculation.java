@@ -15,7 +15,7 @@ public class cutOffCalculation {
 		File fp;
 		
 		//We only need one part file to calculate the cutoff..
-		String Hadoop_Kmer_Output0 = ContrailConfig.Quake_KmerCount+"/part-00000";
+		String Hadoop_Kmer_Output0 = ContrailConfig.Non_Avro_Count_File+"/part-00000";
 		
 		File f = new File(ContrailConfig.Quake_Data+"/part-00000");
 		if (f.exists()) f.delete();

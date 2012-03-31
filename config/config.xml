@@ -41,8 +41,9 @@
 		<flash_join_out>ContrailPlus/Flash_Join_Out</flash_join_out>	
 		<flash_final_out>ContrailPlus/FlashOut</flash_final_out>
 		<quake_preprocess>ContrailPlus/QuakePreprocess</quake_preprocess>
-		<quake_kmercount>ContrailPlus/quake_non_avro_count_file</quake_kmercount>
-		<quake_filtered_kmercount>ContrailPlus/PrunedCounts</quake_filtered_kmercount>
+		<quake_kmercount>ContrailPlus/quake_kmer_count</quake_kmercount>
+		<non_avro_count_part>ContrailPlus/non_avro_count_part</non_avro_count_part>
+		<quake_filtered_kmercount>ContrailPlus/QuakePrunedCounts</quake_filtered_kmercount>
 		<quake_join_out>ContrailPlus/Quake_Join_Out</quake_join_out>
 		<quake_mate_1_flat>ContrailPlus/Quake_Mate_1_Flat</quake_mate_1_flat>
 		<quake_mate_2_flat>ContrailPlus/Quake_Mate_2_Flat</quake_mate_2_flat>

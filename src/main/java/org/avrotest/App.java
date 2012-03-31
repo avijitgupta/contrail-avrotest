@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+
 /**
  * Hello world!
  *
@@ -28,30 +29,37 @@ public class App
     	   //TestWordCount rec = new TestWordCount();
     	
     	///Kmer counting Run
-    	   ContrailConfig.readXMLConfig();
+    	ContrailConfig.readXMLConfig();
     	boolean kmercount =false;
     	boolean avroToNonAvroPartFile = false;
-    	boolean calculateCutOff = true;
+    	boolean calculateCutOff = false;
+    	boolean pruneCountFile = false;
+    	
     	if(kmercount)
     	{
     		kmerCounter k = new kmerCounter();
-    		k.run("outputfq", "ContrailPlus/kmer_count", 13);
+    		k.run("outputfq", "ContrailPlus/quake_kmer_count", 13);
     	}
     	   ///Count File Creation from Avro
     	
     	if(avroToNonAvroPartFile)
     	{
     		convertPartFileToNonAvro conv = new convertPartFileToNonAvro();
-    		conv.run("ContrailPlus/kmer_count", "ContrailPlus/quake_non_avro_count_file");
+    		conv.run("ContrailPlus/quake_kmer_count", "ContrailPlus/non_avro_count_part");
     	}  
     	
     	if(calculateCutOff)
     	{
-    		int cutoff = cutOffCalculation.calculateCutoff();
-    		System.out.print("Cutoff= "+cutoff);
+    		ContrailConfig.cutoff = cutOffCalculation.calculateCutoff();
+    		System.out.print("Cutoff= "+ContrailConfig.cutoff);
     	}
     	
-    	
+    	if(pruneCountFile)
+    	{
+            FilterGlobalCountFile.FilterKmers(ContrailConfig.Quake_KmerCount,ContrailConfig.Quake_Filtered_KmerCount,ContrailConfig.cutoff);
+
+    	}
+    	//////Working till here!
     	//rec.run("inputfq","outputfq");
     	
        } catch (Exception e) {

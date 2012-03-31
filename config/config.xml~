@@ -6,7 +6,7 @@
 
 	<!-- Setup Paths for Different Components-->
 	<setup>
-		<hadoop_home>/usr/lib/hadoop-0.20/bin/hadoop</hadoop_home>
+		<hadoop_home>/usr/lib/hadoop-0.20</hadoop_home>
 		<pig_home>/usr/local/pig-0.9.2/</pig_home>
 		<flash_home>/home/avijit/workspace/AvroTest/flash</flash_home>
 		<quake_home>/home/avijit/workspace/AvroTest/quake</quake_home>
@@ -41,7 +41,8 @@
 		<flash_join_out>ContrailPlus/Flash_Join_Out</flash_join_out>	
 		<flash_final_out>ContrailPlus/FlashOut</flash_final_out>
 		<quake_preprocess>ContrailPlus/QuakePreprocess</quake_preprocess>
-		<quake_kmercount>ContrailPlus/quake_non_avro_count_file</quake_kmercount>
+		<quake_kmercount>ContrailPlus/quake_kmer_count</quake_kmercount>
+		<non_avro_count_part>ContrailPlus/non_avro_count_part</non_avro_count_part>
 		<quake_filtered_kmercount>ContrailPlus/PrunedCounts</quake_filtered_kmercount>
 		<quake_join_out>ContrailPlus/Quake_Join_Out</quake_join_out>
 		<quake_mate_1_flat>ContrailPlus/Quake_Mate_1_Flat</quake_mate_1_flat>
