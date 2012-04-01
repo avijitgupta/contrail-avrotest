@@ -8,7 +8,7 @@ package org.avrotest;
 @SuppressWarnings("all")
 /** Data structures for contrail */
 public interface ContrailProtocol {
-  public static final org.apache.avro.Protocol PROTOCOL = org.apache.avro.Protocol.parse("{\"protocol\":\"ContrailProtocol\",\"namespace\":\"org.avrotest\",\"doc\":\"Data structures for contrail\",\"types\":[{\"type\":\"record\",\"name\":\"fastqrecord\",\"doc\":\"A Fastq Read\",\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"read\",\"type\":\"string\"},{\"name\":\"qvalue\",\"type\":\"string\"}]},{\"type\":\"record\",\"name\":\"kcount\",\"doc\":\"Kmer count Structure\",\"fields\":[{\"name\":\"kmer\",\"type\":\"string\"},{\"name\":\"count\",\"type\":\"long\"}]}],\"messages\":{}}");
+  public static final org.apache.avro.Protocol PROTOCOL = org.apache.avro.Protocol.parse("{\"protocol\":\"ContrailProtocol\",\"namespace\":\"org.avrotest\",\"doc\":\"Data structures for contrail\",\"types\":[{\"type\":\"record\",\"name\":\"fastqrecord\",\"doc\":\"A Fastq Read\",\"fields\":[{\"name\":\"id\",\"type\":\"string\"},{\"name\":\"read\",\"type\":\"string\"},{\"name\":\"qvalue\",\"type\":\"string\"}]},{\"type\":\"record\",\"name\":\"joinedfqrecord\",\"doc\":\"Foined FastQ File Structure\",\"fields\":[{\"name\":\"id1\",\"type\":\"string\"},{\"name\":\"read1\",\"type\":\"string\"},{\"name\":\"qvalue1\",\"type\":\"string\"},{\"name\":\"id2\",\"type\":\"string\"},{\"name\":\"read2\",\"type\":\"string\"},{\"name\":\"qvalue2\",\"type\":\"string\"}]}],\"messages\":{}}");
 
   @SuppressWarnings("all")
   /** Data structures for contrail */

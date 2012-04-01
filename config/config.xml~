@@ -16,7 +16,7 @@
 
 	<!-- Local Data Paths -->
 	<local_data>
-		<flash_input>/home/hduser/workspace/contrailPlus/FlashInputData</flash_input>
+		<flash_input>/home/avijit/workspace/AvroTest/FlashInputData</flash_input>
 		<flash_output>/home/hduser/workspace/contrailPlus/FlashOutputData</flash_output>
 		<quake_data>/home/avijit/workspace/AvroTest/QuakeData</quake_data>
 		<manifest>/home/avijit/workspace/AvroTest/manifest</manifest>
@@ -43,7 +43,7 @@
 		<quake_preprocess>ContrailPlus/QuakePreprocess</quake_preprocess>
 		<quake_kmercount>ContrailPlus/quake_kmer_count</quake_kmercount>
 		<non_avro_count_part>ContrailPlus/non_avro_count_part</non_avro_count_part>
-		<quake_filtered_kmercount>ContrailPlus/PrunedCounts</quake_filtered_kmercount>
+		<quake_filtered_kmercount>ContrailPlus/QuakePrunedCounts</quake_filtered_kmercount>
 		<quake_join_out>ContrailPlus/Quake_Join_Out</quake_join_out>
 		<quake_mate_1_flat>ContrailPlus/Quake_Mate_1_Flat</quake_mate_1_flat>
 		<quake_mate_2_flat>ContrailPlus/Quake_Mate_2_Flat</quake_mate_2_flat>

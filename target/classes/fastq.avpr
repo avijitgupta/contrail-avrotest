@@ -16,11 +16,15 @@
 	},
 	{
  	"type":"record",
- 	"name":"kcount",
- 	"doc":"Kmer count Structure",
+ 	"name":"joinedfqrecord",
+ 	"doc":"Foined FastQ File Structure",
 	 "fields": [
-		  { "name":"kmer", "type":"string"},
-		  { "name":"count", "type":"long"}
+		  { "name":"id1","type":"string"},
+		  { "name":"read1", "type":"string"},
+		  { "name":"qvalue1", "type":"string"},
+		  { "name":"id2","type":"string"},
+		  { "name":"read2", "type":"string"},
+		  { "name":"qvalue2", "type":"string"}
 		]
 	}
 

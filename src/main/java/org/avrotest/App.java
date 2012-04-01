@@ -1,16 +1,13 @@
 package org.avrotest;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 
-
-/**
- * Hello world!
- *
- */
 public class App 
 {
 		
@@ -30,17 +27,69 @@ public class App
     	   //TestWordCount rec = new TestWordCount();
     	
     	///Kmer counting Run
+    	//ContrailConfig.readXMLConfig();
     	ContrailConfig.readXMLConfig();
+    	boolean simulateJoin = false;
     	boolean kmercount =false;
     	boolean avroToNonAvroPartFile = false;
     	boolean calculateCutOff = false;
     	boolean pruneCountFile = false;
-    	boolean calculateBitHash = true;
-    	boolean createGlobalBitHash = true;
-    	boolean quakecompatiblebh = true;
-    	boolean correctForSingles = true;
+    	boolean calculateBitHash = false;
+    	boolean createGlobalBitHash = false;
+    	boolean quakecompatiblebh = false;
+    	boolean correctForSingles = false;
+    	boolean runFlash = true;
     	int K =13;
     	ContrailConfig.K = K;
+    	if(simulateJoin)
+    	{
+    		JoinSimulator js = new JoinSimulator();
+    		js.run(ContrailConfig.Singles, ContrailConfig.Flash_Join_Out);
+    	}
+    	
+    	if(runFlash)
+    	{
+    		String command = ContrailConfig.Hadoop_Home+"/bin/hadoop dfs -rmr "+ContrailConfig.Flash_Final_Out;
+
+        	try {
+                 
+                 Process p = Runtime.getRuntime().exec(command);
+                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                 String s;
+                  while ((s = stdInput.readLine()) != null) {
+                      System.out.print("");
+                  }
+                
+             } catch (IOException e) {
+                 // TODO Auto-generated catch block
+                 e.printStackTrace();
+             }
+             
+             String command2 = ContrailConfig.Hadoop_Home+"/bin/hadoop dfs -mkdir "+ContrailConfig.Flash_Final_Out;
+             
+
+             try {
+                 
+                 Process p = Runtime.getRuntime().exec(command2);
+                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                 
+                 String s;
+
+                  while ((s = stdInput.readLine()) != null) {
+                      System.out.print("");
+                  }
+                
+             } catch (IOException e) {
+                 // TODO Auto-generated catch block
+                 e.printStackTrace();
+             }
+             System.out.println("Flashed Paired Files created");
+             // This is the key method here ExportToPairedFiles() - It triggers a MapReduce Job to first write flash input data on each node, 
+         	 //and then runs flash across the cluster.
+             createPairedReadsForFlash.run(ContrailConfig.Flash_Join_Out, ContrailConfig.junkPath);
+    	}
+    	
+    	
     	if(kmercount)
     	{
     		kmerCounter k = new kmerCounter();
@@ -57,8 +106,10 @@ public class App
     	if(calculateCutOff)
     	{
     		ContrailConfig.cutoff = cutOffCalculation.calculateCutoff();
+    		
     		System.out.print("Cutoff= "+ContrailConfig.cutoff);
     	}
+    	
     	ContrailConfig.cutoff = 3; /// Remove this after testing
     	if(pruneCountFile)
     	{
@@ -91,6 +142,7 @@ public class App
     		String paths = ContrailConfig.Singles;
     		CorrectSinglesInvocationStub.run(paths,ContrailConfig.junkPath);
     	}
+    	
     	
     	
        } catch (Exception e) {

@@ -16,8 +16,8 @@
 
 	<!-- Local Data Paths -->
 	<local_data>
-		<flash_input>/home/hduser/workspace/contrailPlus/FlashInputData</flash_input>
-		<flash_output>/home/hduser/workspace/contrailPlus/FlashOutputData</flash_output>
+		<flash_input>/home/avijit/workspace/AvroTest/FlashInputData</flash_input>
+		<flash_output>/home/avijit/workspace/AvroTest/FlashOutputData</flash_output>
 		<quake_data>/home/avijit/workspace/AvroTest/QuakeData</quake_data>
 		<manifest>/home/avijit/workspace/AvroTest/manifest</manifest>
 	</local_data>
