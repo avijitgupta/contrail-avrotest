@@ -72,7 +72,7 @@ public class localBitHash {
 	
     
 public static class BitHashMapper 
-       extends AvroMapper<Pair<Utf8, Long>, Pair<Utf8, Long>>
+       extends AvroMapper<Pair<Utf8, Long>, NullWritable>
   {	
 	private  ArrayList<String> temp_arraylist;
 	private String datapath;
@@ -134,7 +134,7 @@ public static class BitHashMapper
 	
 	//incoming key,value pairs - (kmer, frequency)
     public void map(Pair<Utf8, Long> count_record, 
-            AvroCollector<Pair<Utf8, Long>> output, Reporter reporter) throws IOException {
+            AvroCollector<NullWritable> output, Reporter reporter) throws IOException {
     
 	    String kmer;
 	    String frequency;
@@ -152,7 +152,7 @@ public static class BitHashMapper
 	    	temp_arraylist.clear();
 	    	count = 0;
 	    }
-    	output.collect(count_record);
+    	output.collect(NullWritable.get());
     }
     
     
@@ -216,7 +216,7 @@ public static void bitHashlocal(String inputPath, String outputPath, long K, lon
 	    ///Input is the kmer count file in Avro. So we used Kmer count recrod schema
 	    AvroJob.setInputSchema(conf, new Pair<Utf8,Long>(new Utf8(""), 0L).getSchema());
 	   ////We dont require an output from this
-	    AvroJob.setOutputSchema(conf, new Pair<Utf8,Long>(new Utf8(""), 0L).getSchema());
+	 //   AvroJob.setOutputSchema(conf, new Pair<Utf8,Long>(new Utf8(""), 0L).getSchema());
 	    AvroJob.setMapperClass(conf, BitHashMapper.class);
 	   // AvroJob.setReducerClass(conf, KmerCounterReducer.class);
 	       

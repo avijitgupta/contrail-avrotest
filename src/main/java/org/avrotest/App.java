@@ -38,7 +38,7 @@ public class App
     	boolean createGlobalBitHash = false;
     	boolean quakecompatiblebh = false;
     	boolean correctForSingles = false;
-    	boolean runFlash = false;
+    	boolean runFlash = true;
     	boolean run_paired_quake = true;
     	int K =13;
     	ContrailConfig.K = K;

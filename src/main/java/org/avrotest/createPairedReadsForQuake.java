@@ -84,7 +84,7 @@ public class createPairedReadsForQuake {
 	}
 	
 	public static class RunCorrectOnPairedMapper 
-    extends AvroMapper<joinedfqrecord, joinedfqrecord>
+    extends AvroMapper<joinedfqrecord, NullWritable>
   {	
 
 	String filePathFq1,filePathFq2;
@@ -126,7 +126,7 @@ public class createPairedReadsForQuake {
 	}
   
 	 public void map(joinedfqrecord joined_record, 
-	            AvroCollector<joinedfqrecord> output, Reporter reporter) throws IOException {
+	            AvroCollector<NullWritable> output, Reporter reporter) throws IOException {
     
     
 		    String seqId = joined_record.id1.toString();
@@ -153,7 +153,7 @@ public class createPairedReadsForQuake {
         count =0;
     }
     		
-    output.collect(joined_record);
+    output.collect(NullWritable.get());
    }
     @Override
     public void close() throws IOException
@@ -193,7 +193,7 @@ public class createPairedReadsForQuake {
 	    joinedfqrecord read = new joinedfqrecord();
 	    AvroJob.setInputSchema(conf, read.getSchema());
 	   ////We dont require an output from this
-	    AvroJob.setMapOutputSchema(conf, read.getSchema());
+	   // AvroJob.setMapOutputSchema(conf, read.getSchema());
 	    
 	   // AvroJob.setReducerClass(conf, KmerCounterReducer.class);
 	       
@@ -211,49 +211,6 @@ public class createPairedReadsForQuake {
 	    float diff = (float) (((float) (endtime - starttime)) / 1000.0);
 	    System.out.println("Runtime: " + diff + " s");
 	    return ;
-		/*Configuration conf = new Configuration();
-		conf.setLong("K", ContrailConfig.K);
-		conf.set("quakedata",ContrailConfig.Quake_Data);
-	    conf.set("quake_mates_out", ContrailConfig.Quake_Final_Out);
-	    conf.set("quakehome",ContrailConfig.Quake_Home);
-	    conf.set("hadoophome",ContrailConfig.Hadoop_Home);
-	    
-	    conf.setInt("mapred.line.input.format.linespermap", 2000000); // must be a multiple of 4
-		System.out.println("Inside createPairedReads");
-	    Job job = new Job(conf, "Paired Reads Creation");    
-	    job.setJarByClass(createPairedReadsForQuake.class);
-	    job.setMapperClass(CorrectMapper.class);
-	    //job.setReducerClass(KmerReducer.class);
-	    job.setOutputValueClass(IntWritable.class);
-	    job.setOutputKeyClass(Text.class);
-	    job.setMapOutputKeyClass(Text.class);
-	    job.setMapOutputValueClass(IntWritable.class); 
-	    
-	    Configuration conf2 = new Configuration();
-	    FileSystem fs = FileSystem.get(conf2);
-	    //Deleting output path if exists
-	    Path fp = new Path(outputPath);
-	    Path fp1 = new Path(ContrailConfig.Quake_Final_Out);
-	    
-	    if (fs.exists(fp1))
-	    {
-	    	fs.delete(fp1);	
-	    }
-	    
-	    fs.mkdirs(fp1);
-	    
-	    
-	    if (fs.exists(fp)) {
-	    	   // remove the file first
-	    	         fs.delete(fp);
-	    	       }
-	    
-	    FileInputFormat.addInputPath(job, new Path(inputPath));
-	    FileOutputFormat.setOutputPath(job, new Path(outputPath));
-	    if(job.waitForCompletion(true)==true)
-	    {
-	    	return;
-	    	
-	    }*/
+		
 	  }
 }

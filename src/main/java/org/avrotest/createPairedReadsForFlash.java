@@ -80,7 +80,7 @@ public class createPairedReadsForFlash
 	}
 	
 	public static class RunFlashMapper 
-    extends AvroMapper<joinedfqrecord, joinedfqrecord>
+    extends AvroMapper<joinedfqrecord, NullWritable>
        //extends Mapper<Object, Text, Tex>
   {	
 	
@@ -119,7 +119,7 @@ public class createPairedReadsForFlash
 	}
   
 	 public void map(joinedfqrecord joined_record, 
-	            AvroCollector<joinedfqrecord> output, Reporter reporter) throws IOException {
+	            AvroCollector<NullWritable> output, Reporter reporter) throws IOException {
 	    
 	    
 	   // int j;
@@ -152,7 +152,7 @@ public class createPairedReadsForFlash
 		    count =0;
 	    }	
 	   
-	    output.collect(joined_record);
+	    output.collect(NullWritable.get());
 	    
 	   }
 	 	
@@ -196,7 +196,7 @@ public class createPairedReadsForFlash
 	    joinedfqrecord read = new joinedfqrecord();
 	    AvroJob.setInputSchema(conf, read.getSchema());
 	   ////We dont require an output from this
-	    AvroJob.setMapOutputSchema(conf, read.getSchema());
+	    //AvroJob.setMapOutputSchema(conf, read.getSchema());
 	    
 	   // AvroJob.setReducerClass(conf, KmerCounterReducer.class);
 	       
