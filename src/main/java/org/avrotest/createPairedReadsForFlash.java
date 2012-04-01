@@ -122,7 +122,7 @@ public class createPairedReadsForFlash
 	            AvroCollector<joinedfqrecord> output, Reporter reporter) throws IOException {
 	    
 	    
-	    int j;
+	   // int j;
 	   // StringTokenizer i = new StringTokenizer(value.toString());
 	    String seqId = joined_record.id1.toString();
 	    String seq1 = joined_record.read1.toString();
@@ -136,8 +136,8 @@ public class createPairedReadsForFlash
 	  /*  ArrayList<String> a1= new ArrayList<String>();
 	    ArrayList<String> a2= new ArrayList<String>();*/
 	    //cutoff = 12; //value not propogating
-	    System.out.println(seqId+"/1\n"+seq1+"\n"+"+\n"+qval1);
-	    System.out.println(seqId+"/2\n"+seq2+"\n"+"+\n"+qval2);
+	  //  System.out.println(seqId+"/1\n"+seq1+"\n"+"+\n"+qval1);
+	    //System.out.println(seqId+"/2\n"+seq2+"\n"+"+\n"+qval2);
 	    count ++;
 	    temp_arraylist_1.add(seqId+"/1\n"+seq1+"\n"+"+\n"+qval1);
 	    temp_arraylist_2.add(seqId+"/2\n"+seq2+"\n"+"+\n"+qval2);
@@ -214,46 +214,7 @@ public class createPairedReadsForFlash
 	    float diff = (float) (((float) (endtime - starttime)) / 1000.0);
 	    System.out.println("Runtime: " + diff + " s");
 	    return ;
-		/*Configuration conf = new Configuration();
 		
-		//conf.set("quakeLocalInput",ContrailConfig.Quake)
-		
-		
-		
-		conf.set("flashLocalInput", ContrailConfig.Flash_Node_In);
-		conf.set("flashHDFSOutput", ContrailConfig.Flash_Final_Out);
-		conf.set("flashHome", ContrailConfig.Flash_Home);
-		conf.set("flashLocalOutput", ContrailConfig.Flash_Node_Out);
-		conf.set("HadoopHome", ContrailConfig.Hadoop_Home);
-		conf.set("CorrectInPath", ContrailConfig.CorrectInDirectory);
-	    Job job = new Job(conf, "Paired Reads Creation");
-	    job.setJarByClass(createPairedReadsForFlash.class);
-	    job.setMapperClass(KmerMapper.class);
-	
-	    //job.setOutputFormat(NullOutputFormat.class);
-	    //System.out.println(inputPath+" "+outputPath);
-	    //job.setOutputValueClass(IntWritable.class);
-	    //job.setOutputKeyClass(Text.class);
-	    //job.setMapOutputKeyClass(Text.class);
-	    //job.setMapOutputValueClass(IntWritable.class); 
-	    
-	    Configuration conf2 = new Configuration();
-	    FileSystem fs = FileSystem.get(conf2);
-	    //Deleting output path if exists
-	    Path fp = new Path(outputPath);
-	    
-	    if (fs.exists(fp)) {
-	    	   // remove the file first
-	    	         fs.delete(fp);
-	    	       }
-	    
-	    FileInputFormat.addInputPath(job, new Path(inputPath));
-	    FileOutputFormat.setOutputPath(job, new Path(outputPath));
-	    if(job.waitForCompletion(true)==true)
-	    {
-	    	return;
-	    	
-	    }*/
 	  }
 	}
 	

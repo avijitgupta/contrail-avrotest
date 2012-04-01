@@ -38,7 +38,8 @@ public class App
     	boolean createGlobalBitHash = false;
     	boolean quakecompatiblebh = false;
     	boolean correctForSingles = false;
-    	boolean runFlash = true;
+    	boolean runFlash = false;
+    	boolean run_paired_quake = true;
     	int K =13;
     	ContrailConfig.K = K;
     	if(simulateJoin)
@@ -143,6 +144,27 @@ public class App
     		CorrectSinglesInvocationStub.run(paths,ContrailConfig.junkPath);
     	}
     	
+    	if(run_paired_quake)
+    	{
+    		String command = ContrailConfig.Hadoop_Home+"/bin/hadoop dfs -ls "+ContrailConfig.Quake_Final_Out;
+         	
+         	try {
+                  
+                  Process p = Runtime.getRuntime().exec(command);
+                  BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                  String s;
+            
+                   while ((s = stdInput.readLine()) != null) {
+                       System.out.print("");
+                   }
+                 
+              } catch (IOException e) {
+                  // TODO Auto-generated catch block
+                  e.printStackTrace();
+              }
+         	System.out.println("Quaked Paired Files creation");
+         	createPairedReadsForQuake.createPairedReads(ContrailConfig.Quake_Join_Out, ContrailConfig.junkPath);
+    	}
     	
     	
        } catch (Exception e) {
