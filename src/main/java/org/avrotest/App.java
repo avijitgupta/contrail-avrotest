@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 
+
 /**
  * Hello world!
  *
@@ -37,7 +38,9 @@ public class App
     	boolean calculateBitHash = true;
     	boolean createGlobalBitHash = true;
     	boolean quakecompatiblebh = true;
+    	boolean correctForSingles = true;
     	int K =13;
+    	ContrailConfig.K = K;
     	if(kmercount)
     	{
     		kmerCounter k = new kmerCounter();
@@ -79,6 +82,14 @@ public class App
     		System.out.println("Generating Quake compatible Bithash");
     		generateQuakeCompatibleBithash.run();
             
+    	}
+    	
+    	if(correctForSingles)
+    	{
+    		//Uncomment this after Flash is done
+    		//String paths = ContrailConfig.Singles+","+ContrailConfig.Flash_Final_Out;
+    		String paths = ContrailConfig.Singles;
+    		CorrectSinglesInvocationStub.run(paths,ContrailConfig.junkPath);
     	}
     	
     	
