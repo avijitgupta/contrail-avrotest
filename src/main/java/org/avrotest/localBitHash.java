@@ -183,15 +183,7 @@ public static class BitHashMapper
 			e.printStackTrace();
 		}
      	
-     	/*String q1= hadoophome+"/bin/hadoop dfs -copyFromLocal "+filepath+"_out "+bitout+"/";
-     	System.out.println(q1);
-     	p = Runtime.getRuntime().exec(q1);
-     	BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-	  	String s;
-		System.out.println("Output");
-		 while ((s = stdInput.readLine()) != null) {
-			 System.out.println(s);
-		 }*/
+     
 		
 		 Configuration conf2 = new Configuration();
 		    FileSystem fs = FileSystem.get(conf2);
@@ -250,45 +242,7 @@ public static void bitHashlocal(String inputPath, String outputPath, long K, lon
 	    float diff = (float) (((float) (endtime - starttime)) / 1000.0);
 	    System.out.println("Runtime: " + diff + " s");
 	    return ;
-	/*Configuration conf = new Configuration();
-	conf.set("Input", ContrailConfig.Quake_Data);
-	conf.set("BitOutput", ContrailConfig.BitHash_Local_Temp);
-	//System.out.println()
-	conf.setLong("K", K);
-	conf.setInt("cutoff", cutoff);
-	conf.set("hadoophome",ContrailConfig.Hadoop_Home);
-    conf.set("quakehome",ContrailConfig.Quake_Home);
-    
-	Job job = new Job(conf, "Generating Local BitHashes..");
-    
-    job.setJarByClass(localBitHash.class);
-    job.setMapperClass(BitHashMapper.class);
-    
-    job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(IntWritable.class);
-    job.setMapOutputKeyClass(Text.class);
-    job.setMapOutputValueClass(IntWritable.class);
-    Configuration conf2 = new Configuration();
-    FileSystem fs = FileSystem.get(conf2);
-    Path fp = new Path(outputpath);
-    Path bo = new Path(ContrailConfig.BitHash_Local_Temp);
-    if (fs.exists(bo))
-    {
-    	fs.delete(bo);
-    }
-    
-    if (fs.exists(fp)) {
-    	   // remove the file first
-    	         fs.delete(fp);
-    	       }
-    fs.mkdirs(bo);
-    FileInputFormat.addInputPath(job, new Path(inputpath));
-    FileOutputFormat.setOutputPath(job, new Path(outputpath));
-    
-    if(job.waitForCompletion(true)==true)
-    {
-    	return;
-    }*/
+	
 	  
     }
   }

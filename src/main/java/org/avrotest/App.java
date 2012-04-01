@@ -35,6 +35,8 @@ public class App
     	boolean calculateCutOff = false;
     	boolean pruneCountFile = false;
     	boolean calculateBitHash = true;
+    	boolean createGlobalBitHash = true;
+    	boolean quakecompatiblebh = true;
     	int K =13;
     	if(kmercount)
     	{
@@ -67,6 +69,18 @@ public class App
     		localBitHash.bitHashlocal(ContrailConfig.Quake_Filtered_KmerCount, ContrailConfig.junkPath, K, ContrailConfig.cutoff);
     	}
     	//rec.run("inputfq","outputfq");
+    	if(createGlobalBitHash)
+    	{
+    		System.out.println("Generating Numeric Bithash ");
+            CreateGlobalBitHash.BitMapGenerator(ContrailConfig.BitHash_Local_Temp, ContrailConfig.BitHash_Output);
+    	}
+    	if(quakecompatiblebh)
+    	{
+    		System.out.println("Generating Quake compatible Bithash");
+    		generateQuakeCompatibleBithash.run();
+            
+    	}
+    	
     	
        } catch (Exception e) {
 		// TODO Auto-generated catch block

@@ -191,7 +191,7 @@ int main(int argc, char **argv) {
   cout << trusted->num_kmers() << " trusted kmers" << endl;
   
   // write to file  
-  //trusted->binary_file_output(outf);
-  trusted->binary_file_output_2(outf);
+  trusted->binary_file_output(outf);
+//  trusted->binary_file_output_2(outf);
   return 0;
 }

@@ -2,7 +2,7 @@ CC=g++
 CFLAGS=-O3 -fopenmp -I/opt/local/var/macports/software/boost/1.46.1_0/opt/local/include -I.
 LDFLAGS=-L. -lgzstream -lz
 #INCLUDEDIR=
-EXE_FILES = correct count-kmers count-qmers count_qmers reduce-kmers reduce-qmers trim build_bithash correct_stats
+EXE_FILES = correct count-kmers count-qmers count_qmers reduce-kmers reduce-qmers trim build_bithash correct_stats write_bithash
 .PHONY: all clean
 
 all: $(EXE_FILES)
@@ -34,7 +34,7 @@ reduce-qmers: reduce-qmers.cpp
 trim: trim.cpp Read.o bithash.o edit.o libgzstream.a
 	$(CC) $(CFLAGS) trim.cpp Read.o bithash.o edit.o -o trim $(LDFLAGS)
 
-build_bithash: build_bithash.cpp bithash.o
+build_bithash: build_bithash.cpp bithash.o 
 	$(CC) $(CFLAGS) build_bithash.cpp bithash.o -o build_bithash
 
 correct_stats: stats.cpp
