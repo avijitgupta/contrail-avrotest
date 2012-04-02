@@ -1,25 +1,53 @@
 package org.avrotest;
-import java.io.BufferedReader;
+
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Calendar;
+import java.nio.ByteBuffer;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.apache.avro.mapred.AvroCollector;
+import org.apache.avro.mapred.AvroJob;
+import org.apache.avro.mapred.AvroMapper;
+import org.apache.avro.mapred.AvroReducer;
+import org.apache.avro.mapred.AvroWrapper;
+import org.apache.avro.mapred.Pair;
+import org.apache.avro.reflect.ReflectData;
+import org.apache.avro.util.Utf8;
+import org.apache.avro.Schema;
+
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Options;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.mapreduce.Mapper.Context;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.mapred.FileInputFormat;
+import org.apache.hadoop.mapred.FileOutputFormat;
+import org.apache.hadoop.mapred.JobClient;
+import org.apache.hadoop.mapred.JobConf;
+import org.apache.hadoop.mapred.Reporter;
+import org.apache.hadoop.mapred.RunningJob;
+import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.util.ToolRunner;
+import org.avrotest.createPairedReadsForFlash.RunFlashMapper;
+import org.avrotest.kmerCounter.KmerCounterMapper;
+import org.avrotest.kmerCounter.KmerCounterReducer;
 
+import java.util.*;
+
+import java.util.Date;
 
 public class CorrectSinglesInvocationStub {
 
@@ -43,8 +71,8 @@ public class CorrectSinglesInvocationStub {
 			  catch (Exception e)	{e.printStackTrace();}
 	}
 	
-public static class KmerMapper 
-       extends Mapper<Object, Text, Text, IntWritable>
+	public static class RunCorrectOnSinglesMapper 
+    extends AvroMapper<fastqrecord, NullWritable>
   {	
 	private int idx = 0;
 	private String line1 = null;
@@ -58,76 +86,60 @@ public static class KmerMapper
     private String quakedata = null;
     private String singles_out = null;
     private long K = 0;
-    private ArrayList<String> a;
+    private ArrayList<String> temp_arraylist;
     int count = 0;
     int flagStarting;
-    protected void setup(final Context context) 
-	{
+    @Override
+    public void configure(JobConf job) 
+    {
     	Calendar calendar = Calendar.getInstance();
         java.util.Date now = calendar.getTime();
         java.sql.Timestamp currentTimestamp = new java.sql.Timestamp(now.getTime());
         localTime = ""+currentTimestamp.getNanos();
 		
-		quakehome = context.getConfiguration().get("quakehome");
-		quakedata = context.getConfiguration().get("quakedata");
-		hadoophome = context.getConfiguration().get("hadoophome");
-		singles_out = context.getConfiguration().get("singles_out");
+		quakehome = job.get("quakehome");
+		quakedata = job.get("quakedata");
+		hadoophome = job.get("hadoophome");
+		singles_out = job.get("singles_out");
 		
-		K = context.getConfiguration().getLong("K", 0);
-		a = new ArrayList<String>();
+		K = job.getLong("K", 0);
+		temp_arraylist = new ArrayList<String>();
 		filePath = quakedata+"/"+localTime+"_quakesingle.fq";
 		//flagStarting = 0;
 		//System.out.println("cutoff in setup"+cutOff+" "+ Cutoff.cutoff);
 	}
     
-	public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
+    public void map(fastqrecord fq_record, 
+            AvroCollector<NullWritable> output, Reporter reporter) throws IOException {
     
    
-    String line = value.toString();
-    idx++;
-   /* if(flagStarting==0 && line.charAt(0)!='@')
-    {
-    	return;
-    }
-    else
-    {
-    	
-    	flagStarting =1;
-    	 
-    }*/
-    if(idx == 1){line1 = line;}
-    if(idx == 2){line2 = line;}
-    if(idx == 3){line3 = line;}
-    if(idx == 4)
-    {
-    	line4 = line;
-    	a.add(line1+"\n"+line2+"\n"+line3+"\n"+line4);
+    
+    	line1 = fq_record.id.toString();
+    	line2 = fq_record.read.toString();
+    	line3 = "+";
+    	line4 = fq_record.qvalue.toString();;
+    	temp_arraylist.add(line1+"\n"+line2+"\n"+line3+"\n"+line4);
     	count ++;
     	if(count==10000)
     	{
-    		CorrectSinglesInvocationStub.writeLocalFile(a,filePath);
-    		a.clear();
+    		CorrectSinglesInvocationStub.writeLocalFile(temp_arraylist,filePath);
+    		temp_arraylist.clear();
     		count =0;
-    		Text word = new Text();
-            IntWritable one= new IntWritable(1);
-            word.set(line);
-            context.write(word, one);
+    		
     	}
 
-    	// I have reservations if this will be split on line boundary - mapred.linespermap is old api - D
-    	idx = idx%4;
+        output.collect(NullWritable.get());
+
     	
     }
  
-  }
-	
-	@Override
-	protected void cleanup(final Context context)
-	{
+  	@Override
+  	 public void close() throws IOException
+ 	{
 		if(count > 0)
 		{
-			CorrectSinglesInvocationStub.writeLocalFile(a,filePath);
-			a.clear();
+			CorrectSinglesInvocationStub.writeLocalFile(temp_arraylist,filePath);
+			temp_arraylist.clear();
     		count =0;
 		}
 		CorrectLocal.runcode(filePath,localTime,K,hadoophome,quakehome,quakedata,singles_out);
@@ -141,10 +153,11 @@ public static class KmerMapper
   
 
   @SuppressWarnings("deprecation")
-public static void run(String inputpath, String outputpath) throws Exception {
+public static void run(String inputPath, String outputPath) throws Exception {
 	  
    
-	Configuration conf = new Configuration();
+	JobConf conf = new JobConf(createPairedReadsForQuake.class);
+	conf.setJobName("Running Correct Local ");
 	conf.setLong("K", ContrailConfig.K);
 	conf.set("quakehome", ContrailConfig.Quake_Home);
 	conf.set("quakedata",ContrailConfig.Quake_Data);
@@ -154,7 +167,24 @@ public static void run(String inputpath, String outputpath) throws Exception {
 	
 	//conf.setInt("mapreduce.input.lineinputformat.linespermap", 2000000); // must be a multiple of 4
 	conf.setInt("mapred.task.timeout", 0);
-	    
+    AvroJob.setMapperClass(conf, RunCorrectOnSinglesMapper.class);
+    FileInputFormat.addInputPath(conf, new Path(inputPath));
+    FileOutputFormat.setOutputPath(conf, new Path(outputPath));
+    fastqrecord read = new fastqrecord();
+    AvroJob.setInputSchema(conf, read.getSchema());
+    conf.setNumReduceTasks(0);
+    Path out_path = new Path(outputPath);
+    if (FileSystem.get(conf).exists(out_path)) {
+      FileSystem.get(conf).delete(out_path, true);  
+    }
+    
+    long starttime = System.currentTimeMillis();            
+    JobClient.runJob(conf);
+    long endtime = System.currentTimeMillis();
+    float diff = (float) (((float) (endtime - starttime)) / 1000.0);
+    System.out.println("Runtime: " + diff + " s");
+    return ;
+	/*  
     Job job = new Job(conf, "Correct Singles Invocation Stub");
     
     NLineInputFormat.setNumLinesPerSplit(job, 2000000);
@@ -196,7 +226,7 @@ public static void run(String inputpath, String outputpath) throws Exception {
     {
     	return;
     	
-    }
+    }*/
     }
 	
 }

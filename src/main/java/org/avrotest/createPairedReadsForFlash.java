@@ -60,6 +60,7 @@ public class createPairedReadsForFlash
 			  for(int i=0;i<a1.size();i++)
 			  {
 				  out.write(a1.get(i)+"\n");
+				  System.out.print(a1.get(i)+"\n");
 			  }
 			  out.close();
 			  fstream.close();
@@ -124,6 +125,7 @@ public class createPairedReadsForFlash
 	    
 	   // int j;
 	   // StringTokenizer i = new StringTokenizer(value.toString());
+		 System.out.println("Inside the map");
 	    String seqId = joined_record.id1.toString();
 	    String seq1 = joined_record.read1.toString();
 	    String qval1 = joined_record.qvalue1.toString();

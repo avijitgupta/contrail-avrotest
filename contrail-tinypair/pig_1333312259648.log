@@ -1,0 +1,75 @@
+Pig Stack Trace
+---------------
+ERROR 2999: Unexpected internal error. could not instantiate 'org.apache.pig.piggybank.storage.avro.AvroStorage' with arguments '[index, 1, schema,  {"type":"record","name":"X",
+"fields": [
+{"name":"id1","type":"string"},
+{"name":"read1","type":"string"},
+{"name":"qvalue1","type":"string"}
+{"name":"id2","type":"string"},
+{"name":"read2","type":"string"},
+{"name":"qvalue2","type":"string"}
+]
+}
+]'
+
+java.lang.RuntimeException: could not instantiate 'org.apache.pig.piggybank.storage.avro.AvroStorage' with arguments '[index, 1, schema,  {"type":"record","name":"X",
+"fields": [
+{"name":"id1","type":"string"},
+{"name":"read1","type":"string"},
+{"name":"qvalue1","type":"string"}
+{"name":"id2","type":"string"},
+{"name":"read2","type":"string"},
+{"name":"qvalue2","type":"string"}
+]
+}
+]'
+	at org.apache.pig.impl.PigContext.instantiateFuncFromSpec(PigContext.java:491)
+	at org.apache.pig.impl.logicalLayer.parser.QueryParser.NonEvalFuncSpec(QueryParser.java:5660)
+	at org.apache.pig.impl.logicalLayer.parser.QueryParser.StoreClause(QueryParser.java:4034)
+	at org.apache.pig.impl.logicalLayer.parser.QueryParser.BaseExpr(QueryParser.java:1501)
+	at org.apache.pig.impl.logicalLayer.parser.QueryParser.Expr(QueryParser.java:1013)
+	at org.apache.pig.impl.logicalLayer.parser.QueryParser.Parse(QueryParser.java:825)
+	at org.apache.pig.impl.logicalLayer.LogicalPlanBuilder.parse(LogicalPlanBuilder.java:63)
+	at org.apache.pig.PigServer$Graph.parseQuery(PigServer.java:1612)
+	at org.apache.pig.PigServer$Graph.registerQuery(PigServer.java:1562)
+	at org.apache.pig.PigServer.registerQuery(PigServer.java:534)
+	at org.apache.pig.tools.grunt.GruntParser.processPig(GruntParser.java:871)
+	at org.apache.pig.tools.pigscript.parser.PigScriptParser.parse(PigScriptParser.java:388)
+	at org.apache.pig.tools.grunt.GruntParser.parseStopOnError(GruntParser.java:168)
+	at org.apache.pig.tools.grunt.GruntParser.parseStopOnError(GruntParser.java:144)
+	at org.apache.pig.tools.grunt.Grunt.run(Grunt.java:76)
+	at org.apache.pig.Main.run(Main.java:455)
+	at org.apache.pig.Main.main(Main.java:107)
+Caused by: java.lang.reflect.InvocationTargetException
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:39)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:27)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:513)
+	at org.apache.pig.impl.PigContext.instantiateFuncFromSpec(PigContext.java:481)
+	... 16 more
+Caused by: org.apache.avro.SchemaParseException: org.codehaus.jackson.JsonParseException: Unexpected character ('{' (code 123)): was expecting comma to separate ARRAY entries
+ at [Source: java.io.StringReader@658f7386; line: 6, column: 2]
+	at org.apache.avro.Schema$Parser.parse(Schema.java:933)
+	at org.apache.avro.Schema$Parser.parse(Schema.java:921)
+	at org.apache.avro.Schema.parse(Schema.java:970)
+	at org.apache.pig.piggybank.storage.avro.AvroStorage.init(AvroStorage.java:437)
+	at org.apache.pig.piggybank.storage.avro.AvroStorage.<init>(AvroStorage.java:119)
+	... 21 more
+Caused by: org.codehaus.jackson.JsonParseException: Unexpected character ('{' (code 123)): was expecting comma to separate ARRAY entries
+ at [Source: java.io.StringReader@658f7386; line: 6, column: 2]
+	at org.codehaus.jackson.JsonParser._constructError(JsonParser.java:1213)
+	at org.codehaus.jackson.impl.JsonParserMinimalBase._reportError(JsonParserMinimalBase.java:375)
+	at org.codehaus.jackson.impl.JsonParserMinimalBase._reportUnexpectedChar(JsonParserMinimalBase.java:306)
+	at org.codehaus.jackson.impl.ReaderBasedParser.nextToken(ReaderBasedParser.java:283)
+	at org.codehaus.jackson.map.deser.BaseNodeDeserializer.deserializeArray(JsonNodeDeserializer.java:200)
+	at org.codehaus.jackson.map.deser.BaseNodeDeserializer.deserializeAny(JsonNodeDeserializer.java:216)
+	at org.codehaus.jackson.map.deser.BaseNodeDeserializer.deserializeObject(JsonNodeDeserializer.java:187)
+	at org.codehaus.jackson.map.deser.BaseNodeDeserializer.deserializeAny(JsonNodeDeserializer.java:213)
+	at org.codehaus.jackson.map.deser.JsonNodeDeserializer.deserialize(JsonNodeDeserializer.java:56)
+	at org.codehaus.jackson.map.deser.JsonNodeDeserializer.deserialize(JsonNodeDeserializer.java:13)
+	at org.codehaus.jackson.map.ObjectMapper._readValue(ObjectMapper.java:2112)
+	at org.codehaus.jackson.map.ObjectMapper.readTree(ObjectMapper.java:1065)
+	at org.codehaus.jackson.map.ObjectMapper.readTree(ObjectMapper.java:1040)
+	at org.apache.avro.Schema$Parser.parse(Schema.java:931)
+	... 25 more
+================================================================================

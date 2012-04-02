@@ -46,12 +46,12 @@ public class ContrailConfig
 	// HDFS Input Directory of Set 1 for Flash
 	public static String Flash_Mate_1 = null;
 	// Flattened Data from Set 1
-	public static String Flash_Mate_1_Flat = null;
+	public static String Flash_Mate_1_Avro = null;
 	
 	//HDFS Input Directory of Set 2 (Set 1's Mates) for Flash
 	public static String Flash_Mate_2 = null;
 	//Flattened Data from Set 2
-	public static String Flash_Mate_2_Flat = null;
+	public static String Flash_Mate_2_Avro = null;
 	
 	//Path on each node to its local Flash Input Data
 	//Batched inputs for Flash Merging will be created at this path.
@@ -74,8 +74,8 @@ public class ContrailConfig
 	public static String Quake_Mate_1 = null;
 	public static String Quake_Mate_2 = null;
 	
-	public static String Quake_Mate_1_Flat = null;
-	public static String Quake_Mate_2_Flat = null;
+	public static String Quake_Mate_1_Avro = null;  ////--->Changed
+	public static String Quake_Mate_2_Avro = null; //// --->Changed
 	
 	public static String Quake_Final_Out = null;
 	public static String Quake_Singles_Out = null;
@@ -245,10 +245,10 @@ public class ContrailConfig
 		Flash_Mate_2 = config.getString("hdfs_in_data.flash_mate_2");
 		Quake_Mate_1 = config.getString("hdfs_in_data.quake_mate_1");
 		Quake_Mate_2 = config.getString("hdfs_in_data.quake_mate_2");
-		Flash_Mate_1_Flat = config.getString("hdfs_out_data.flash_mate_1_flat");
-		Flash_Mate_2_Flat = config.getString("hdfs_out_data.flash_mate_2_flat");
-		Quake_Mate_1_Flat = config.getString("hdfs_out_data.quake_mate_1_flat");
-		Quake_Mate_2_Flat = config.getString("hdfs_out_data.quake_mate_2_flat");
+		Flash_Mate_1_Avro = config.getString("hdfs_out_data.flash_mate_1_avro");
+		Flash_Mate_2_Avro = config.getString("hdfs_out_data.flash_mate_2_avro");
+		Quake_Mate_1_Avro = config.getString("hdfs_out_data.quake_mate_1_avro");
+		Quake_Mate_2_Avro = config.getString("hdfs_out_data.quake_mate_2_avro");
 		Singles = config.getString("hdfs_in_data.singles");
 		Quake_Singles_Out = config.getString("hdfs_out_data.quake_singles_out");
 		Quake_Final_Out = config.getString("hdfs_out_data.quake_final_out");

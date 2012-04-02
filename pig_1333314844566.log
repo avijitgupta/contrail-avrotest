@@ -1,0 +1,44 @@
+Pig Stack Trace
+---------------
+ERROR 2116: Output Location Validation Failed for: 'hdfs://localhost/user/avijit/ContrailPlus/Flash_Join_Out More info to follow:
+Expect 3 fields in pig schema. But there are 6
+
+org.apache.pig.impl.logicalLayer.FrontendException: ERROR 1002: Unable to store alias 21
+	at org.apache.pig.PigServer$Graph.registerQuery(PigServer.java:1580)
+	at org.apache.pig.PigServer.registerQuery(PigServer.java:534)
+	at org.apache.pig.tools.grunt.GruntParser.processPig(GruntParser.java:871)
+	at org.apache.pig.tools.pigscript.parser.PigScriptParser.parse(PigScriptParser.java:388)
+	at org.apache.pig.tools.grunt.GruntParser.parseStopOnError(GruntParser.java:168)
+	at org.apache.pig.tools.grunt.GruntParser.parseStopOnError(GruntParser.java:144)
+	at org.apache.pig.tools.grunt.Grunt.run(Grunt.java:76)
+	at org.apache.pig.Main.run(Main.java:455)
+	at org.apache.pig.Main.main(Main.java:107)
+Caused by: org.apache.pig.impl.logicalLayer.FrontendException: ERROR 2042: Error in new logical plan. Try -Dpig.usenewlogicalplan=false.
+	at org.apache.pig.backend.hadoop.executionengine.HExecutionEngine.compile(HExecutionEngine.java:313)
+	at org.apache.pig.PigServer.compilePp(PigServer.java:1365)
+	at org.apache.pig.PigServer.executeCompiledLogicalPlan(PigServer.java:1207)
+	at org.apache.pig.PigServer.execute(PigServer.java:1201)
+	at org.apache.pig.PigServer.access$100(PigServer.java:129)
+	at org.apache.pig.PigServer$Graph.execute(PigServer.java:1528)
+	at org.apache.pig.PigServer$Graph.registerQuery(PigServer.java:1575)
+	... 8 more
+Caused by: org.apache.pig.impl.logicalLayer.FrontendException: ERROR 2116: Output Location Validation Failed for: 'hdfs://localhost/user/avijit/ContrailPlus/Flash_Join_Out More info to follow:
+Expect 3 fields in pig schema. But there are 6
+	at org.apache.pig.newplan.logical.rules.InputOutputFileValidator$InputOutputFileVisitor.visit(InputOutputFileValidator.java:82)
+	at org.apache.pig.newplan.logical.relational.LOStore.accept(LOStore.java:76)
+	at org.apache.pig.newplan.DepthFirstWalker.depthFirst(DepthFirstWalker.java:64)
+	at org.apache.pig.newplan.DepthFirstWalker.depthFirst(DepthFirstWalker.java:66)
+	at org.apache.pig.newplan.DepthFirstWalker.depthFirst(DepthFirstWalker.java:66)
+	at org.apache.pig.newplan.DepthFirstWalker.depthFirst(DepthFirstWalker.java:66)
+	at org.apache.pig.newplan.DepthFirstWalker.walk(DepthFirstWalker.java:53)
+	at org.apache.pig.newplan.PlanVisitor.visit(PlanVisitor.java:50)
+	at org.apache.pig.newplan.logical.rules.InputOutputFileValidator.validate(InputOutputFileValidator.java:52)
+	at org.apache.pig.backend.hadoop.executionengine.HExecutionEngine.compile(HExecutionEngine.java:292)
+	... 14 more
+Caused by: java.io.IOException: Expect 3 fields in pig schema. But there are 6
+	at org.apache.pig.piggybank.storage.avro.PigSchema2Avro.validateAndConvertRecord(PigSchema2Avro.java:317)
+	at org.apache.pig.piggybank.storage.avro.PigSchema2Avro.validateAndConvert(PigSchema2Avro.java:221)
+	at org.apache.pig.piggybank.storage.avro.AvroStorage.checkSchema(AvroStorage.java:532)
+	at org.apache.pig.newplan.logical.rules.InputOutputFileValidator$InputOutputFileVisitor.visit(InputOutputFileValidator.java:72)
+	... 23 more
+================================================================================

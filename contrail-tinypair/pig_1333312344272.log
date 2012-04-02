@@ -1,0 +1,27 @@
+Pig Stack Trace
+---------------
+ERROR 1070: Could not resolve org.apache.pig.impl.io.avro.AvroStorage using imports: [, org.apache.pig.builtin., org.apache.pig.impl.builtin.]
+
+java.lang.RuntimeException: Cannot instantiate:org.apache.pig.impl.io.avro.AvroStorage
+	at org.apache.pig.impl.PigContext.instantiateFuncFromSpec(PigContext.java:459)
+	at org.apache.pig.impl.logicalLayer.parser.QueryParser.NonEvalFuncSpec(QueryParser.java:5660)
+	at org.apache.pig.impl.logicalLayer.parser.QueryParser.StoreClause(QueryParser.java:4034)
+	at org.apache.pig.impl.logicalLayer.parser.QueryParser.BaseExpr(QueryParser.java:1501)
+	at org.apache.pig.impl.logicalLayer.parser.QueryParser.Expr(QueryParser.java:1013)
+	at org.apache.pig.impl.logicalLayer.parser.QueryParser.Parse(QueryParser.java:825)
+	at org.apache.pig.impl.logicalLayer.LogicalPlanBuilder.parse(LogicalPlanBuilder.java:63)
+	at org.apache.pig.PigServer$Graph.parseQuery(PigServer.java:1612)
+	at org.apache.pig.PigServer$Graph.registerQuery(PigServer.java:1562)
+	at org.apache.pig.PigServer.registerQuery(PigServer.java:534)
+	at org.apache.pig.tools.grunt.GruntParser.processPig(GruntParser.java:871)
+	at org.apache.pig.tools.pigscript.parser.PigScriptParser.parse(PigScriptParser.java:388)
+	at org.apache.pig.tools.grunt.GruntParser.parseStopOnError(GruntParser.java:168)
+	at org.apache.pig.tools.grunt.GruntParser.parseStopOnError(GruntParser.java:144)
+	at org.apache.pig.tools.grunt.Grunt.run(Grunt.java:76)
+	at org.apache.pig.Main.run(Main.java:455)
+	at org.apache.pig.Main.main(Main.java:107)
+Caused by: org.apache.pig.backend.executionengine.ExecException: ERROR 1070: Could not resolve org.apache.pig.impl.io.avro.AvroStorage using imports: [, org.apache.pig.builtin., org.apache.pig.impl.builtin.]
+	at org.apache.pig.impl.PigContext.resolveClassName(PigContext.java:444)
+	at org.apache.pig.impl.PigContext.instantiateFuncFromSpec(PigContext.java:456)
+	... 16 more
+================================================================================

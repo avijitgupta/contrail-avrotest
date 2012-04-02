@@ -48,10 +48,9 @@ public class FastQtoAvro
    *
    */
 	
-public static final Schema OUT_SCHEMA = ReflectData.get().getSchema(FqRecord.class);
 
 	
-  public static class FastqPreprocessorMapper extends MapReduceBase  implements Mapper<LongWritable, Text, AvroWrapper<FqRecord>, NullWritable> 
+  public static class FastqPreprocessorMapper extends MapReduceBase  implements Mapper<LongWritable, Text, AvroWrapper<fastqrecord>, NullWritable> 
   {
     private int idx = 0;
 
@@ -74,8 +73,8 @@ public static final Schema OUT_SCHEMA = ReflectData.get().getSchema(FqRecord.cla
     // initial size for the buffer used to encode the dna sequence
     private int START_CAPACITY = 200;
 
-    private FqRecord read = new FqRecord();
-    private AvroWrapper<FqRecord> out_wrapper = new AvroWrapper<FqRecord>(read);
+    private fastqrecord read = new fastqrecord();
+    private AvroWrapper<fastqrecord> out_wrapper = new AvroWrapper<fastqrecord>(read);
 
   //  private ByteReplaceAll replacer = null; 
 
@@ -96,95 +95,16 @@ public static final Schema OUT_SCHEMA = ReflectData.get().getSchema(FqRecord.cla
     
     public void configure(JobConf job) 
     {
-     /* filename = job.get("map.input.file");
-
-      boolean usesuffix = Integer.parseInt(job.get("PREPROCESS_SUFFIX")) == 1;
-
-      String suffix = null;
-      if (usesuffix)
-      {
-        if  (filename.contains("_1.")) { 
-          suffix = "_1";
-          mate_id = 0x1; 
-          counter = "pair_1"; 
-        }
-        else if (filename.contains("_2.")) { 
-          suffix = "_2";
-          mate_id = 0x2;
-          counter = "pair_2";
-        }
-        else { 
-          counter = "pair_unpaired"; 
-        }
-
-        System.err.println(filename + " suffix: \"" + suffix + "" + "\"");
-      }                  
-      read.mate_pair_id = mate_id;
-      replacer = new ByteReplaceAll(":#-.|/$%&'()*+,-./:","_");
-
-      alphabet = DNAAlphabetFactory.create();
-      sequence = new Sequence(alphabet);
-      
-      // utf8_whitespace[x] = True with the utf8 charater with value
-      // x is a white space character. False otherwise.
-      utf8_whitespace = new boolean[255];
-      java.util.Arrays.fill(utf8_whitespace, false);
-      
-      String white_space = " \n\t";
-      byte[] white_space_bytes = ByteUtil.stringToBytes(white_space);
-      
-      for (int pos = 0; pos < white_space_bytes.length; pos++) {
-        utf8_whitespace[pos] = true;
-      }
-    
-      utf8_at = ByteUtil.stringToBytes("@")[0];
-      utf8_space = ByteUtil.stringToBytes(" ")[0];*/
+     
     }
 
-    public void map(LongWritable lineid, Text line, OutputCollector<AvroWrapper<FqRecord>, NullWritable> output, Reporter reporter) throws IOException 
+    public void map(LongWritable lineid, Text line, OutputCollector<AvroWrapper<fastqrecord>, NullWritable> output, Reporter reporter) throws IOException 
     {
   	//  System.out.print("In Mapper");
 
       if (idx == 0) 
       { 
-    	  
-      
-    	 // We operate on the bytes instead of converting to a string.
-        // The advantage is that we can use our more efficient implementation
-        // for replace all. 
-       /* byte[] data = line.getBytes();
-
-        // Replace any multibyte characters with "_"
-        int valid_length = ByteUtil.replaceMultiByteChars(data, MULTIBYTE_REPLACE_VALUE, line.getLength());
-
-        // make sure it starts with the @ symbol
-        if (data[0] != utf8_at)
-        {                                       
-          throw new IOException("ERROR: Invalid readname: " + line.toString() + " in " + filename);
-        }
-
-        // Find the location of the first space in the name.
-        int end_index = valid_length-1;
-        for (int index = 1; index <= end_index; index++){
-          if (data[index] == utf8_space){
-            end_index = index -1;
-            break;
-          }
-        }
-        
-        // Remove any trailing whitespace.
-        while (utf8_whitespace[ByteUtil.byteToUint(data[end_index])]) {
-          end_index--;
-        }
-        
-        // Remove the leading '@' and chop everything after the first space.
-        data = java.util.Arrays.copyOfRange(data, 1, end_index+1);
-
-        // Replace any funny characters                                 
-        // with "_"
-        replacer.replaceAll(data);
-
-        name = new String(data, ByteReplaceAll.encoding);   */     
+    	
     	  fqid = line.toString();
       }
       else if (idx == 1) {    
@@ -207,6 +127,9 @@ public static final Schema OUT_SCHEMA = ReflectData.get().getSchema(FqRecord.cla
       else if (idx == 3)
       {               
     	 fqqvalue = line.toString();
+    	 int ind = fqid.lastIndexOf('/');
+     	 if (ind==-1){}//fastq not in proper format for mate pair reading
+     	 fqid = fqid.substring(0,ind);
     	 read.id = fqid;
     	 read.qvalue = fqqvalue;
     	 read.read = fqread;
@@ -237,7 +160,9 @@ public static final Schema OUT_SCHEMA = ReflectData.get().getSchema(FqRecord.cla
   ///////////////////////////////////////////////////////////////////////////           
   public RunningJob run(String inputPath, String outputPath) throws Exception
   { 
- 
+	fastqrecord read = new fastqrecord();
+	Schema OUT_SCHEMA = read.getSchema();
+
     JobConf conf = new JobConf(FastQtoAvro.class);
     conf.setJobName("Conversion from text to Avro" + inputPath);
 
@@ -259,7 +184,10 @@ public static final Schema OUT_SCHEMA = ReflectData.get().getSchema(FqRecord.cla
     AvroJob.setOutputSchema(conf,OUT_SCHEMA);
 
     //delete the output directory if it exists already
-    FileSystem.get(conf).delete(new Path(outputPath), true);
+    Path out_path = new Path(outputPath);
+    if (FileSystem.get(conf).exists(out_path)) {
+      FileSystem.get(conf).delete(out_path, true);  
+    }
 
     
     long start_time = System.currentTimeMillis();    

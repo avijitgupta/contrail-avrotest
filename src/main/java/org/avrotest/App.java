@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 
+
+
 public class App 
 {
 		
@@ -15,42 +17,94 @@ public class App
     {
        try {
     	  
-    	//Experiment e = new Experiment();
-    	
-    	//e.testwriteavro();
-		
-    	//SpawnMapsTest.SpawnRunner("paths","outputtest");
-    	//AvroReader avr = new AvroReader();
-    	//avr.AvroReaderRunner("outputtest", "reader_out");
-    	//Hadooper.Run(outputPath, inFile, outFile, schema);
-       
-    	   //TestWordCount rec = new TestWordCount();
-    	
-    	///Kmer counting Run
-    	//ContrailConfig.readXMLConfig();
-    	ContrailConfig.readXMLConfig();
+    
+    	ContrailConfig.readXMLConfig();    	
+    	boolean convertFlashInputToAvro = true;
+    	boolean sortFiles = false;
+    	boolean convertQuakeInputToAvro = false;
     	boolean simulateJoin = false;
-    	boolean kmercount =false;
-    	boolean avroToNonAvroPartFile = false;
-    	boolean calculateCutOff = false;
-    	boolean pruneCountFile = false;
-    	boolean calculateBitHash = false;
-    	boolean createGlobalBitHash = false;
-    	boolean quakecompatiblebh = false;
-    	boolean correctForSingles = false;
+    	boolean kmercount =true;
+    	boolean avroToNonAvroPartFile = true;
+    	boolean calculateCutOff = true;
+    	boolean pruneCountFile = true;
+    	boolean calculateBitHash = true;
+    	boolean createGlobalBitHash = true;
+    	boolean quakecompatiblebh = true;
+    	boolean correctForSingles = true;
     	boolean runFlash = true;
     	boolean run_paired_quake = true;
+    	boolean runJoinFlash ;
+    	boolean deleteFlashLog ;
+    	runJoinFlash = deleteFlashLog = true;
+    	boolean runJoinQuake ;
+    	boolean deleteQuakeLog ;
+    	runJoinQuake = deleteQuakeLog = true;
+    	
     	int K =13;
+    	
     	ContrailConfig.K = K;
-    	if(simulateJoin)
+    	
+    	if(convertFlashInputToAvro)
+    	{
+    		System.out.println("Converting Files into Avro");
+    		FastQtoAvro fqta = new FastQtoAvro();
+    		
+    		fqta.run(ContrailConfig.Flash_Mate_1, ContrailConfig.Flash_Mate_1_Avro);
+    		fqta.run(ContrailConfig.Flash_Mate_2, ContrailConfig.Flash_Mate_2_Avro);
+    		
+    		fqta.run(ContrailConfig.Quake_Mate_1, ContrailConfig.Quake_Mate_1_Avro);
+    		fqta.run(ContrailConfig.Quake_Mate_2, ContrailConfig.Quake_Mate_2_Avro);
+
+    		fqta.run("singles_input", ContrailConfig.Singles);
+    	}
+    	/*if(sortFiles)
+    	{
+    		SortAvroFile obj = new SortAvroFile();
+    		obj.run(ContrailConfig.Flash_Mate_1_Avro, "ContrailPlus/Flash_Avro_1_Sorted");
+    		obj.run(ContrailConfig.Flash_Mate_2_Avro, "ContrailPlus/Flash_Avro_2_Sorted");
+    	}
+    	*/
+    	/*if(simulateJoin)
     	{
     		JoinSimulator js = new JoinSimulator();
     		js.run(ContrailConfig.Singles, ContrailConfig.Flash_Join_Out);
     	}
-    	
+    	*/
+    	if(runJoinFlash)
+    	{
+    		 System.out.println("Joining For Flash");
+    		 joinGenerator.generateJoin(ContrailConfig.Flash_Join_Out, "flash");
+    	}
+    	 if(deleteFlashLog)
+         {
+    		 System.out.println("Deleting Flash Log");
+             String logPath = ContrailConfig.Flash_Join_Out+"/_logs";
+             String command = ContrailConfig.Hadoop_Home+"/bin/hadoop dfs -rmr " + logPath;    
+             try {
+                
+                 Process p = Runtime.getRuntime().exec(command);
+                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                 String s;
+                
+                  while ((s = stdInput.readLine()) != null) {
+                      System.out.print("");
+                  }
+                
+             } catch (IOException e) {
+                 // TODO Auto-generated catch block
+                 e.printStackTrace();
+             }
+             
+         }
+        
+    	 
+    	 
     	if(runFlash)
     	{
+   		 System.out.println("Running Flash");
+
     		String command = ContrailConfig.Hadoop_Home+"/bin/hadoop dfs -rmr "+ContrailConfig.Flash_Final_Out;
+      		 System.out.println(command);
 
         	try {
                  
@@ -67,7 +121,8 @@ public class App
              }
              
              String command2 = ContrailConfig.Hadoop_Home+"/bin/hadoop dfs -mkdir "+ContrailConfig.Flash_Final_Out;
-             
+       		 System.out.println(command2);
+
 
              try {
                  
@@ -84,7 +139,7 @@ public class App
                  // TODO Auto-generated catch block
                  e.printStackTrace();
              }
-             System.out.println("Flashed Paired Files created");
+             System.out.println("Flash Paired Files createtion");
              // This is the key method here ExportToPairedFiles() - It triggers a MapReduce Job to first write flash input data on each node, 
          	 //and then runs flash across the cluster.
              createPairedReadsForFlash.run(ContrailConfig.Flash_Join_Out, ContrailConfig.junkPath);
@@ -93,27 +148,34 @@ public class App
     	
     	if(kmercount)
     	{
+    		System.out.println("Counting Kmers");
+    		
     		kmerCounter k = new kmerCounter();
-    		k.run("outputfq", "ContrailPlus/quake_kmer_count", K);
+    		k.run(ContrailConfig.Singles, ContrailConfig.Quake_KmerCount, K);
     	}
     	   ///Count File Creation from Avro
     	
     	if(avroToNonAvroPartFile)
     	{
+    		System.out.println("Converting Part File to Non Avro");
+    		
     		convertPartFileToNonAvro conv = new convertPartFileToNonAvro();
-    		conv.run("ContrailPlus/quake_kmer_count", "ContrailPlus/non_avro_count_part");
+    		conv.run(ContrailConfig.Quake_KmerCount+"/part-00000.avro", ContrailConfig.Non_Avro_Count_File);
     	}  
     	
     	if(calculateCutOff)
     	{
+    		System.out.println("Calculating Cutoff");
+
     		ContrailConfig.cutoff = cutOffCalculation.calculateCutoff();
-    		
-    		System.out.print("Cutoff= "+ContrailConfig.cutoff);
+    		System.out.print("\nCutoff Here= "+ContrailConfig.cutoff);
     	}
     	
-    	ContrailConfig.cutoff = 3; /// Remove this after testing
+    	//ContrailConfig.cutoff = 3; /// Remove this after testing
     	if(pruneCountFile)
     	{
+    		System.out.println("Pruning Counts File");
+
             FilterGlobalCountFile.FilterKmers(ContrailConfig.Quake_KmerCount,ContrailConfig.Quake_Filtered_KmerCount,ContrailConfig.cutoff);
 
     	}
@@ -121,12 +183,13 @@ public class App
     	
     	if(calculateBitHash)
     	{
+    		System.out.println("Calculating Bithash Local");
     		localBitHash.bitHashlocal(ContrailConfig.Quake_Filtered_KmerCount, ContrailConfig.junkPath, K, ContrailConfig.cutoff);
     	}
     	//rec.run("inputfq","outputfq");
     	if(createGlobalBitHash)
     	{
-    		System.out.println("Generating Numeric Bithash ");
+    		System.out.println("Generating Numeric Bithash Global ");
             CreateGlobalBitHash.BitMapGenerator(ContrailConfig.BitHash_Local_Temp, ContrailConfig.BitHash_Output);
     	}
     	if(quakecompatiblebh)
@@ -140,13 +203,45 @@ public class App
     	{
     		//Uncomment this after Flash is done
     		//String paths = ContrailConfig.Singles+","+ContrailConfig.Flash_Final_Out;
+    		System.out.println("Running Correct for singles");
+
     		String paths = ContrailConfig.Singles;
     		CorrectSinglesInvocationStub.run(paths,ContrailConfig.junkPath);
     	}
     	
+    	if(runJoinQuake)
+    	{
+    		System.out.println("Generating Quake Join");
+    		 joinGenerator.generateJoin(ContrailConfig.Quake_Join_Out, "quake");
+    	}
+    	 if(deleteQuakeLog)
+         {
+     		System.out.println("Deleting Quake Join Log");
+
+             String logPath = ContrailConfig.Quake_Join_Out+"/_logs";
+             String command = ContrailConfig.Hadoop_Home+"/bin/hadoop dfs -rmr " + logPath;    
+             try {
+                
+                 Process p = Runtime.getRuntime().exec(command);
+                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                 String s;
+                
+                  while ((s = stdInput.readLine()) != null) {
+                      System.out.print("");
+                  }
+                
+             } catch (IOException e) {
+                 // TODO Auto-generated catch block
+                 e.printStackTrace();
+             }
+             
+         }
+    	
     	if(run_paired_quake)
     	{
-    		String command = ContrailConfig.Hadoop_Home+"/bin/hadoop dfs -ls "+ContrailConfig.Quake_Final_Out;
+    		System.out.println("Running Quake on Paired Reads");
+
+    		String command = ContrailConfig.Hadoop_Home+"/bin/hadoop dfs -rmr "+ContrailConfig.Quake_Final_Out;
          	
          	try {
                   
@@ -162,6 +257,24 @@ public class App
                   // TODO Auto-generated catch block
                   e.printStackTrace();
               }
+         	
+         	command = ContrailConfig.Hadoop_Home+"/bin/hadoop dfs -mkdir "+ContrailConfig.Quake_Final_Out;
+         	
+         	try {
+                  
+                  Process p = Runtime.getRuntime().exec(command);
+                  BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                  String s;
+            
+                   while ((s = stdInput.readLine()) != null) {
+                       System.out.print("");
+                   }
+                 
+              } catch (IOException e) {
+                  // TODO Auto-generated catch block
+                  e.printStackTrace();
+              }
+         	
          	System.out.println("Quaked Paired Files creation");
          	createPairedReadsForQuake.createPairedReads(ContrailConfig.Quake_Join_Out, ContrailConfig.junkPath);
     	}

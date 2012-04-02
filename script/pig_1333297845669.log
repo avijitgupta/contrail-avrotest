@@ -1,0 +1,30 @@
+Pig Stack Trace
+---------------
+ERROR 101: Local file 'avro-1.4.0.jar' does not exist.
+
+org.apache.pig.backend.executionengine.ExecException: ERROR 101: Local file 'avro-1.4.0.jar' does not exist.
+	at org.apache.pig.impl.io.FileLocalizer.fetchFile(FileLocalizer.java:750)
+	at org.apache.pig.PigServer.registerJar(PigServer.java:483)
+	at org.apache.pig.tools.grunt.GruntParser.processRegister(GruntParser.java:381)
+	at org.apache.pig.tools.pigscript.parser.PigScriptParser.parse(PigScriptParser.java:421)
+	at org.apache.pig.tools.grunt.GruntParser.parseStopOnError(GruntParser.java:168)
+	at org.apache.pig.tools.grunt.GruntParser.parseStopOnError(GruntParser.java:144)
+	at org.apache.pig.tools.grunt.Grunt.run(Grunt.java:76)
+	at org.apache.pig.Main.run(Main.java:455)
+	at org.apache.pig.Main.main(Main.java:107)
+================================================================================
+Pig Stack Trace
+---------------
+ERROR 101: Local file 'json-simple-1.1.jar' does not exist.
+
+org.apache.pig.backend.executionengine.ExecException: ERROR 101: Local file 'json-simple-1.1.jar' does not exist.
+	at org.apache.pig.impl.io.FileLocalizer.fetchFile(FileLocalizer.java:750)
+	at org.apache.pig.PigServer.registerJar(PigServer.java:483)
+	at org.apache.pig.tools.grunt.GruntParser.processRegister(GruntParser.java:381)
+	at org.apache.pig.tools.pigscript.parser.PigScriptParser.parse(PigScriptParser.java:421)
+	at org.apache.pig.tools.grunt.GruntParser.parseStopOnError(GruntParser.java:168)
+	at org.apache.pig.tools.grunt.GruntParser.parseStopOnError(GruntParser.java:144)
+	at org.apache.pig.tools.grunt.Grunt.run(Grunt.java:76)
+	at org.apache.pig.Main.run(Main.java:455)
+	at org.apache.pig.Main.main(Main.java:107)
+================================================================================

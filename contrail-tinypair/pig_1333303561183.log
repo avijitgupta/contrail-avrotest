@@ -1,0 +1,41 @@
+Backend error message
+---------------------
+org.apache.pig.backend.executionengine.ExecException: ERROR 1102: Data is not sorted on left side. Last two keys encountered were: 
+@F/1
+@10/1
+	at org.apache.pig.backend.hadoop.executionengine.physicalLayer.relationalOperators.POMergeJoin.getNext(POMergeJoin.java:287)
+	at org.apache.pig.backend.hadoop.executionengine.mapReduceLayer.PigMapBase.runPipeline(PigMapBase.java:237)
+	at org.apache.pig.backend.hadoop.executionengine.mapReduceLayer.PigMapBase.map(PigMapBase.java:232)
+	at org.apache.pig.backend.hadoop.executionengine.mapReduceLayer.PigMapBase.map(PigMapBase.java:53)
+	at org.apache.hadoop.mapreduce.Mapper.run(Mapper.java:144)
+	at org.apache.hadoop.mapred.MapTask.runNewMapper(MapTask.java:647)
+	at org.apache.hadoop.mapred.MapTask.run(MapTask.java:323)
+	at org.apache.hadoop.mapred.Child$4.run(Child.java:270)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at javax.security.auth.Subject.doAs(Subject.java:396)
+	at org.apache.hadoop.security.UserGroupInformation.doAs(UserGroupInformation.java:
+
+Pig Stack Trace
+---------------
+ERROR 2997: Unable to recreate exception from backed error: org.apache.pig.backend.executionengine.ExecException: ERROR 1102: Data is not sorted on left side. Last two keys encountered were: 
+
+org.apache.pig.impl.logicalLayer.FrontendException: ERROR 1066: Unable to open iterator for alias joinedfq. Backend error : Unable to recreate exception from backed error: org.apache.pig.backend.executionengine.ExecException: ERROR 1102: Data is not sorted on left side. Last two keys encountered were: 
+	at org.apache.pig.PigServer.openIterator(PigServer.java:753)
+	at org.apache.pig.tools.grunt.GruntParser.processDump(GruntParser.java:615)
+	at org.apache.pig.tools.pigscript.parser.PigScriptParser.parse(PigScriptParser.java:303)
+	at org.apache.pig.tools.grunt.GruntParser.parseStopOnError(GruntParser.java:168)
+	at org.apache.pig.tools.grunt.GruntParser.parseStopOnError(GruntParser.java:144)
+	at org.apache.pig.tools.grunt.Grunt.run(Grunt.java:76)
+	at org.apache.pig.Main.run(Main.java:455)
+	at org.apache.pig.Main.main(Main.java:107)
+Caused by: org.apache.pig.backend.executionengine.ExecException: ERROR 2997: Unable to recreate exception from backed error: org.apache.pig.backend.executionengine.ExecException: ERROR 1102: Data is not sorted on left side. Last two keys encountered were: 
+	at org.apache.pig.backend.hadoop.executionengine.mapReduceLayer.Launcher.getErrorMessages(Launcher.java:221)
+	at org.apache.pig.backend.hadoop.executionengine.mapReduceLayer.Launcher.getStats(Launcher.java:151)
+	at org.apache.pig.backend.hadoop.executionengine.mapReduceLayer.MapReduceLauncher.launchPig(MapReduceLauncher.java:337)
+	at org.apache.pig.backend.hadoop.executionengine.HExecutionEngine.execute(HExecutionEngine.java:382)
+	at org.apache.pig.PigServer.executeCompiledLogicalPlan(PigServer.java:1209)
+	at org.apache.pig.PigServer.storeEx(PigServer.java:885)
+	at org.apache.pig.PigServer.store(PigServer.java:827)
+	at org.apache.pig.PigServer.openIterator(PigServer.java:739)
+	... 7 more
+================================================================================

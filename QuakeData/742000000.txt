@@ -1,0 +1,1 @@
+/home/avijit/workspace/AvroTest/QuakeData/742000000_quakesingle.fq
