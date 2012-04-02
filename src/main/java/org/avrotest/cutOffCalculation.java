@@ -6,6 +6,9 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+/*
+ * This class calculates the cutoff by invoking cov_model.py - Quake
+ */
 public class cutOffCalculation {
 
 	public static int calculateCutoff() throws Exception{
@@ -29,14 +32,12 @@ public class cutOffCalculation {
 		String s;
 		Process p = Runtime.getRuntime().exec(command);
 		p.waitFor();
-		//System.out.print("Return value" + p.toString()+p.exitValue());
-        BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+		BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
         BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
         StringTokenizer str ;
 	    
 	        int cutoff=0;
-	        // read the output from the command
-	        //System.out.println("Copying Part file from HDFS to LOCAL\n");
+	       
 	        
 	        while ((s = stdInput.readLine()) != null) {
 	                  	System.out.println(s);
@@ -55,18 +56,23 @@ public class cutOffCalculation {
         while ((s = stdInput.readLine()) != null) {
          str = new StringTokenizer(s);
             
-        	
+        /*This is a hack - everything displayed by the execution of 
+         * cov_model.py here is stored in str line by line. In the end, the token containing
+         * the cutoff is taken out :P
+         * */
            if(str.countTokens()!=0 && str.nextToken().trim().equals("Cutoff:"))
             {
             		String ss = str.nextToken();
             		cutoff = Integer.parseInt(ss);
-            		System.out.println("testcutoff: "+ss+"Cutoff "+cutoff);
             		break;
             }
         
         }
 		p.waitFor();
-        	
+        //Deleting Temp File	
+		f = new File(ContrailConfig.Quake_Data+"/part-00000");
+		if (f.exists()) f.delete();
+		
 	return cutoff;	
 	}
 	

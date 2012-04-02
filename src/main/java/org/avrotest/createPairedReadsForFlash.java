@@ -1,6 +1,7 @@
 package org.avrotest;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -48,6 +49,12 @@ import java.util.*;
 
 import java.util.Date;
 
+/*
+ * The run is similar to quake error paired correction
+ * The joined avro fq file is split into local normal data files
+ * close() invokes flash 
+ * Temporary results are deleted
+ */
 public class createPairedReadsForFlash 
 {
 
@@ -60,7 +67,7 @@ public class createPairedReadsForFlash
 			  for(int i=0;i<a1.size();i++)
 			  {
 				  out.write(a1.get(i)+"\n");
-				  System.out.print(a1.get(i)+"\n");
+				 
 			  }
 			  out.close();
 			  fstream.close();
@@ -82,7 +89,6 @@ public class createPairedReadsForFlash
 	
 	public static class RunFlashMapper 
     extends AvroMapper<joinedfqrecord, NullWritable>
-       //extends Mapper<Object, Text, Tex>
   {	
 	
 	String filePathFq1,filePathFq2;
@@ -114,18 +120,14 @@ public class createPairedReadsForFlash
 		temp_arraylist_1= new ArrayList<String>();
 		temp_arraylist_2= new ArrayList<String>();
 	    count = 0;
-		//filePathFq1 = "/home/hduser/fq1.fq";
-        //filePathFq2 = "/home/hduser/fq2.fq";
-		//System.out.println("cutoff in setup"+cutOff+" "+ Cutoff.cutoff);
+	
 	}
   
 	 public void map(joinedfqrecord joined_record, 
 	            AvroCollector<NullWritable> output, Reporter reporter) throws IOException {
 	    
 	    
-	   // int j;
-	   // StringTokenizer i = new StringTokenizer(value.toString());
-		 System.out.println("Inside the map");
+	   
 	    String seqId = joined_record.id1.toString();
 	    String seq1 = joined_record.read1.toString();
 	    String qval1 = joined_record.qvalue1.toString();
@@ -133,21 +135,12 @@ public class createPairedReadsForFlash
 	    String seq2 = joined_record.read2.toString();
 	    String qval2 = joined_record.qvalue2.toString();
 	    
-	    //Text word = new Text();
-	    //IntWritable one= new IntWritable(1);
-	  /*  ArrayList<String> a1= new ArrayList<String>();
-	    ArrayList<String> a2= new ArrayList<String>();*/
-	    //cutoff = 12; //value not propogating
-	  //  System.out.println(seqId+"/1\n"+seq1+"\n"+"+\n"+qval1);
-	    //System.out.println(seqId+"/2\n"+seq2+"\n"+"+\n"+qval2);
+	  
 	    count ++;
 	    temp_arraylist_1.add(seqId+"/1\n"+seq1+"\n"+"+\n"+qval1);
 	    temp_arraylist_2.add(seqId+"/2\n"+seq2+"\n"+"+\n"+qval2);
 	    if(count ==10000)
 	    {
-		    
-		    //word.set(seqId);
-		    //context.write(word, one);
 		    createPairedReadsForFlash.writeLocalFile(temp_arraylist_1,temp_arraylist_2,filePathFq1,filePathFq2);  
 		    temp_arraylist_1.clear();
 		    temp_arraylist_2.clear();
@@ -167,12 +160,12 @@ public class createPairedReadsForFlash
 	    	}
 	    	runFlash.flashRunner(filePathFq1, filePathFq2, localTime,FlashFinalOut, FlashLocalOut, FlashHome, HadoopHome,CorrectInPath);
 	    	//Cleaning Up local Files
-	    	/*
+	    	
 	    	File fp = new File(filePathFq1);
 	    	if(fp.exists())fp.delete();
 	    	fp = new File(filePathFq2);
 	    	if(fp.exists())fp.delete();
-	    	*/
+	    	
 	    }
 }
 	public static void run(String inputPath, String outputPath) throws Exception 
@@ -194,17 +187,14 @@ public class createPairedReadsForFlash
 
 	    FileInputFormat.addInputPath(conf, new Path(inputPath));
 	    FileOutputFormat.setOutputPath(conf, new Path(outputPath));
-	    ///Input is the kmer count file in Avro. So we used Kmer count recrod schema
+	    ///Input is the joined mate pair file in Avro. 
 	    joinedfqrecord read = new joinedfqrecord();
 	    AvroJob.setInputSchema(conf, read.getSchema());
-	   ////We dont require an output from this
-	    //AvroJob.setMapOutputSchema(conf, read.getSchema());
-	    
-	   // AvroJob.setReducerClass(conf, KmerCounterReducer.class);
-	       
+	  
 	    //Map Only Job
 	    conf.setNumReduceTasks(0);
-	 // Delete the output directory if it exists already
+	 
+	    // Delete the output directory if it exists already
 	    Path out_path = new Path(outputPath);
 	    if (FileSystem.get(conf).exists(out_path)) {
 	      FileSystem.get(conf).delete(out_path, true);  

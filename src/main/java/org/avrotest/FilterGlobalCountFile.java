@@ -39,7 +39,10 @@ import org.apache.hadoop.mapred.RunningJob;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import java.util.*;
-
+/* This class prunes the count file according to the cutoff obtained
+ * The mapper reads in Avro records and emits out avro records if the value
+ * of count is greater than cutoff. This significantly reduces file size  
+ */
 public class FilterGlobalCountFile {
 
 
@@ -78,8 +81,7 @@ public class FilterGlobalCountFile {
         AvroJob.setOutputSchema(conf, new Pair<Utf8,Long>(new Utf8(""), 0L).getSchema());
         AvroJob.setMapperClass(conf, FilterMapper.class);
         conf.setNumReduceTasks(0);
-        //AvroJob.setReducerClass(conf, KmerCounterReducer.class);
-           // Delete the output directory if it exists already
+      
         Path out_path = new Path(outputPath);
         if (FileSystem.get(conf).exists(out_path)) {
           FileSystem.get(conf).delete(out_path, true);  
@@ -91,36 +93,7 @@ public class FilterGlobalCountFile {
         float diff = (float) (((float) (endtime - starttime)) / 1000.0);
         System.out.println("Runtime: " + diff + " s");
         return ;
-    	/*
-    	Configuration conf = new Configuration();
-    	conf.setInt("cutoff", cutoff);
-    	
-        Job job = new Job(conf, "Filtering Kmers");
-        
-        job.setJarByClass(FilterGlobalCountFile.class);
-        job.setMapperClass(FilterMapper.class);
-        
-        job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(IntWritable.class);
-        job.setMapOutputKeyClass(Text.class);
-        job.setMapOutputValueClass(IntWritable.class);
-        Configuration conf2 = new Configuration();
-        FileSystem fs = FileSystem.get(conf2);
-        Path fp = new Path(outputpath);
-        
-        if (fs.exists(fp)) {
-        	   // remove the file first
-        	         fs.delete(fp);
-        	       }
-        
-        FileInputFormat.addInputPath(job, new Path(inputpath));
-        FileOutputFormat.setOutputPath(job, new Path(outputpath));
-        
-        if(job.waitForCompletion(true)==true)
-        {
-        	return;	
-        }
-      */  
+    	  
     }
 
 

@@ -1,6 +1,7 @@
 package org.avrotest;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -49,6 +50,11 @@ import java.util.*;
 
 import java.util.Date;
 
+/*
+ * This class runs correct on singles
+ * Mapper - Writes the input avro format fastq file into normal format on local disk
+ * Close() invokes the correct program
+ */
 public class CorrectSinglesInvocationStub {
 
 	final static int MAX= 2;
@@ -105,8 +111,7 @@ public class CorrectSinglesInvocationStub {
 		K = job.getLong("K", 0);
 		temp_arraylist = new ArrayList<String>();
 		filePath = quakedata+"/"+localTime+"_quakesingle.fq";
-		//flagStarting = 0;
-		//System.out.println("cutoff in setup"+cutOff+" "+ Cutoff.cutoff);
+
 	}
     
     public void map(fastqrecord fq_record, 
@@ -145,8 +150,8 @@ public class CorrectSinglesInvocationStub {
 		CorrectLocal.runcode(filePath,localTime,K,hadoophome,quakehome,quakedata,singles_out);
 		
 		//deleting Local File
-		//File fp = new File(filePath);
-		//if(fp.exists())fp.delete();
+		File fp = new File(filePath);
+		if(fp.exists())fp.delete();
 	}
 }
 
@@ -157,6 +162,7 @@ public static void run(String inputPath, String outputPath) throws Exception {
 	  
    
 	JobConf conf = new JobConf(createPairedReadsForQuake.class);
+	// Basic Initialisation
 	conf.setJobName("Running Correct Local ");
 	conf.setLong("K", ContrailConfig.K);
 	conf.set("quakehome", ContrailConfig.Quake_Home);
@@ -164,11 +170,9 @@ public static void run(String inputPath, String outputPath) throws Exception {
 	conf.set("hadoophome", ContrailConfig.Hadoop_Home);
 	conf.set("singles_out",ContrailConfig.Quake_Singles_Out);
 	
-	
-	//conf.setInt("mapreduce.input.lineinputformat.linespermap", 2000000); // must be a multiple of 4
 	conf.setInt("mapred.task.timeout", 0);
     AvroJob.setMapperClass(conf, RunCorrectOnSinglesMapper.class);
-    FileInputFormat.addInputPath(conf, new Path(inputPath));
+    FileInputFormat.addInputPaths(conf, inputPath);
     FileOutputFormat.setOutputPath(conf, new Path(outputPath));
     fastqrecord read = new fastqrecord();
     AvroJob.setInputSchema(conf, read.getSchema());
@@ -184,49 +188,7 @@ public static void run(String inputPath, String outputPath) throws Exception {
     float diff = (float) (((float) (endtime - starttime)) / 1000.0);
     System.out.println("Runtime: " + diff + " s");
     return ;
-	/*  
-    Job job = new Job(conf, "Correct Singles Invocation Stub");
-    
-    NLineInputFormat.setNumLinesPerSplit(job, 2000000);
-
-
-    Calendar calendar = Calendar.getInstance();
-    java.util.Date now = calendar.getTime();
-    java.sql.Timestamp currentTimestamp = new java.sql.Timestamp(now.getTime());
-    
-    job.setJarByClass(CorrectSinglesInvocationStub.class);
-    job.setMapperClass(KmerMapper.class);
-    job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(IntWritable.class);
-    job.setMapOutputKeyClass(Text.class);
-    job.setMapOutputValueClass(IntWritable.class);
-    Configuration conf2 = new Configuration();
-    FileSystem fs = FileSystem.get(conf2);
-    Path fp = new Path(outputpath);
-    Path singles_out = new Path(ContrailConfig.Quake_Singles_Out);
-    if (fs.exists(singles_out))
-    {
-    	fs.delete(singles_out);
-    	
-    }
-    // Create the Output Directory in HDFS. - Data is written to this from within Mapper.
-    fs.mkdirs(singles_out);
-    if (fs.exists(fp)) {
-    	   // remove the file first
-    	         fs.delete(fp);
-    	       }
-    
-    FileInputFormat.setInputPaths(job, inputpath);
-    //addInputPath(job, new Path(inputpath));
-    // this output path is junk.
-   
-    FileOutputFormat.setOutputPath(job, new Path(outputpath));
-    
-    if(job.waitForCompletion(true)==true)
-    {
-    	return;
-    	
-    }*/
+	
     }
 	
 }

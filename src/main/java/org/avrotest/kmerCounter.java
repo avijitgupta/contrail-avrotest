@@ -56,7 +56,6 @@ public class kmerCounter
                 public void configure(JobConf job) 
                 {
                        K= job.getLong("K", 0);
-                       //System.out.println("Value of K "+ K);
                         
                 }
 
@@ -67,7 +66,7 @@ public class kmerCounter
 
                 	String id = compressed_read.id.toString();
                 	String seq= compressed_read.read.toString();
-                  //  System.out.println(id+" " + seq);
+                  
 
                 	/* We convert every kmer to its canonical for the kmer counting phase so that
             		 * canonical kmers dont appear at different places

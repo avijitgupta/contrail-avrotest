@@ -11,7 +11,10 @@ public class generateQuakeCompatibleBithash {
 		Process p;
 		
 		try {
+			//Cleaning up older data
 			File f = new File(ContrailConfig.Quake_Data+"/merged.out");
+			if(f.exists()) f.delete();
+			f = new File(ContrailConfig.Quake_Data+"/qcb");
 			if(f.exists()) f.delete();
 			
 			String command = ContrailConfig.Hadoop_Home+"/bin/hadoop dfs -getmerge "+ContrailConfig.BitHash_Output+" "+ContrailConfig.Quake_Data+"/merged.out";
@@ -25,6 +28,8 @@ public class generateQuakeCompatibleBithash {
 		}
 				
 		String writer_source = ContrailConfig.Quake_Home+"/src/write_bithash";
+		
+		
 		
 		String command = writer_source+" "+ContrailConfig.Quake_Data+"/merged.out "+ContrailConfig.Quake_Data+"/qcb";
 		System.out.println(command);

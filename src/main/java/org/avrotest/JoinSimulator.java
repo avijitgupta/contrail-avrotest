@@ -27,9 +27,9 @@ import org.apache.hadoop.mapred.TextInputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.apache.hadoop.mapred.lib.NLineInputFormat;
-
+/* Test code for simulating joins. This is not used in main contrail*/
 public class JoinSimulator {
-	public static final Schema OUT_SCHEMA = ReflectData.get().getSchema(FqRecord.class);
+/*	public static final Schema OUT_SCHEMA = ReflectData.get().getSchema(FqRecord.class);
 
 	
 	  public static class FastqPreprocessorMapper extends MapReduceBase  implements Mapper<LongWritable, Text, AvroWrapper<joinedfqrecord>, NullWritable> 
@@ -44,10 +44,6 @@ public class JoinSimulator {
 
 	    private int mate_id = 0x0;
 
-	    /**
-	     *  The alphabet for encoding the sequences.
-	     */
-	  //  private Alphabet alphabet;
 
 	    private String counter = "pair_unknown";
 
@@ -162,7 +158,7 @@ public class JoinSimulator {
 	    System.out.println("Job took: " + nseconds + " seconds");
 	    
 	    return result;
-	  }
+	  }*/
 }
 
 

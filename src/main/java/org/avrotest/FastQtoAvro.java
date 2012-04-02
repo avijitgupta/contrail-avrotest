@@ -28,28 +28,13 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.apache.hadoop.mapred.lib.NLineInputFormat;
 
-
-/**
- * Map reduce job to encode FastQ files in sequence files using AVRO.
- * DNA sequences are encoded as bytes arrays. The DNA sequence is packed into an array
- * of bytes using 3 bits per letter.  
- * 
- * We encode the data as byte arrays and try to avoid convertng it to a String because
- * toString() is expensive.
- *
+/*
+ * This is a simple class used to convert Normal Fastq Data into the Avro format fastq data
  */
 
 public class FastQtoAvro 
 {       
-  /**
-   * Mapper.
-   * 
-   * @author jlewi
-   *
-   */
-	
-
-	
+  	
   public static class FastqPreprocessorMapper extends MapReduceBase  implements Mapper<LongWritable, Text, AvroWrapper<fastqrecord>, NullWritable> 
   {
     private int idx = 0;
@@ -60,85 +45,45 @@ public class FastQtoAvro
     private String filename = null;
     private String fqqvalue = null;
 
-    private int mate_id = 0x0;
-
-    /**
-     *  The alphabet for encoding the sequences.
-     */
-  //  private Alphabet alphabet;
-
-    private String counter = "pair_unknown";
-
-
-    // initial size for the buffer used to encode the dna sequence
-    private int START_CAPACITY = 200;
 
     private fastqrecord read = new fastqrecord();
     private AvroWrapper<fastqrecord> out_wrapper = new AvroWrapper<fastqrecord>(read);
 
-  //  private ByteReplaceAll replacer = null; 
-
-    // The byte value to replace multi-byte characters with
-    // this an underscore.
-    public final byte MULTIBYTE_REPLACE_VALUE = 0x5f;
-
-    // The sequence.
-  //  private Sequence sequence;
-    
-    // An array which can be used to tell if a UTF8 value
-    // is whitespace
-    private boolean[] utf8_whitespace;
-    
-    // Store the utf8 byte values of various characters
-    private byte utf8_at;
-    private byte utf8_space;
-    
     public void configure(JobConf job) 
     {
      
     }
-
+/*
+ * The mapper takes in key value pairs in the normal format and emits out Avro data
+ */
     public void map(LongWritable lineid, Text line, OutputCollector<AvroWrapper<fastqrecord>, NullWritable> output, Reporter reporter) throws IOException 
     {
-  	//  System.out.print("In Mapper");
 
       if (idx == 0) 
       { 
-    	
-    	  fqid = line.toString();
+    	  fqid = line.toString(); // The ID
       }
       else if (idx == 1) {    
-    	//  System.out.print("In line 2");
-    	  
-      /*  byte[] raw_bytes = line.getBytes();
-        // TODO(jeremy@lewi.us): We should really only be checking the bytes upto line.getLength()
-        if (ByteUtil.hasMultiByteChars(raw_bytes)){
-          throw new RuntimeException("DNA sequence contained illegal characters. Sequence is: " + line.toString());
-        }
-
-        sequence.readUTF8(raw_bytes, line.getLength());
-        int num_bytes =  (int)Math.ceil((alphabet.bitsPerLetter() * sequence.size())/ 8.0);
-        
-        read.dna = ByteBuffer.wrap(sequence.toPackedBytes(), 0, num_bytes);      */  
-    	  fqread = line.toString();
+    	
+    	  fqread = line.toString(); // The kmer read
       }
       else if (idx == 2) { 
       }
       else if (idx == 3)
       {               
     	 fqqvalue = line.toString();
+    	 /* Index of / is calculated since we need to make ids of mate pairs the same. We truncate everything
+    	  * after this /. Error condition is not handled till now.
+    	  */
     	 int ind = fqid.lastIndexOf('/');
      	 if (ind==-1){}//fastq not in proper format for mate pair reading
      	 fqid = fqid.substring(0,ind);
     	 read.id = fqid;
     	 read.qvalue = fqqvalue;
     	 read.read = fqread;
-    	  // System.out.print("In line 4");
-     /*   read.id = name;*/                                                 
+    	                                             
         output.collect(out_wrapper, NullWritable.get());
-/*
-        reporter.incrCounter("Contrail", "preprocessed_reads", 1);
-        reporter.incrCounter("Contrail", counter, 1);*/
+
       }
 
       idx = (idx + 1) % 4;
@@ -148,7 +93,8 @@ public class FastQtoAvro
     {
       if (idx != 0)
       {
-    //    throw new IOException("ERROR: closing with idx = " + idx + " in " + filename);
+    	  // Non multiple of 4  split
+        throw new IOException("ERROR: closing with idx = " + idx + " in " + filename);
       }
     }
 
@@ -180,7 +126,6 @@ public class FastQtoAvro
     conf.setInputFormat(NLineInputFormat.class);
     conf.setInt("mapred.line.input.format.linespermap", 2000000); // must be a multiple of 4
 
-    // TODO(jlewi): use setoutput codec to set the compression codec. 
     AvroJob.setOutputSchema(conf,OUT_SCHEMA);
 
     //delete the output directory if it exists already

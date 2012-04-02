@@ -15,7 +15,11 @@ import org.apache.hadoop.mapreduce.Reducer.Context;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-
+/*
+ * Numeric Bithashes from all local runs are available in one directory.
+ * The contents of all such files is ORed to generate the global bithash.
+ * This is done in the reduce phase
+ */
 public class CreateGlobalBitHash {
 
 	public static class BitHashMapper 

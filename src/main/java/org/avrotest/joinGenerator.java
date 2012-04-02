@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class joinGenerator {
-
+/* Invokes the pig script*/
 	public static void generateJoin(String joinedFilePath, String cmd) throws Exception 
 	{
 		//delete mergedpath if it exists for the pig script 

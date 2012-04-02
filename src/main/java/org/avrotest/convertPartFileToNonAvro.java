@@ -78,7 +78,6 @@ public class convertPartFileToNonAvro {
 	    			while(counts.hasNext())
 	    			{
 	    				AvroValue<Long> count = counts.next();
-	    				//System.out.println("Kmer "+kmer.toString()+ "Count "+ count.datum().toString());
 	    				collector.collect(new Text(kmer.datum().toString()), new LongWritable(count.datum()));
 	    			}
 	     	}
@@ -95,18 +94,13 @@ protected int run(String inputPath, String outputPath) throws Exception {
 
   FileInputFormat.addInputPath(conf, new Path(inputPath));
   FileOutputFormat.setOutputPath(conf, new Path(outputPath));
-  //conf.setR(Text.class);
-  //conf.setMapOutputValueClass(LongWritable.class);
-  AvroJob.setInputSchema(conf, new Pair<Utf8,Long>(new Utf8(""), 0L).getSchema());
-  AvroJob.setMapOutputSchema(conf, new Pair<Utf8,Long>(new Utf8(""), 0L).getSchema());
 
-  //AvroJob.setOutputSchema(conf, );
-  
+  AvroJob.setInputSchema(conf, new Pair<Utf8,Long>(new Utf8(""), 0L).getSchema());
+  AvroJob.setMapOutputSchema(conf, new Pair<Utf8,Long>(new Utf8(""), 0L).getSchema());  
   AvroJob.setMapperClass(conf, copyPartMapper.class);
   conf.setReducerClass(copyPartReducer.class);
   conf.setOutputKeyClass(Text.class);
   conf.setOutputValueClass(LongWritable.class);
- // conf.setNumReduceTasks(0);
 
      // Delete the output directory if it exists already
   Path out_path = new Path(outputPath);

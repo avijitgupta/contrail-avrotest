@@ -13,7 +13,6 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
-//added the value of K.. avijit .. base file WriteLocalFastQFile.java
 public class CorrectLocal
 {
 	static void runcode(String filePath, String localTime, long K , String hadoophome, String quakehome, String quakedata, String singles_out)
@@ -23,8 +22,7 @@ public class CorrectLocal
 			String fastqListLocation = quakedata+"/"+localTime+".txt";
 			
 			try{
-				
-				// Hahaha - this is a nice hack! - D
+				/* Writes the temporary file to be created - its name to the temp .txt file - fastqListLocation*/
 				  FileWriter fstream = new FileWriter(fastqListLocation,true);
 				  BufferedWriter out = new BufferedWriter(fstream);
 				  out.write(fastqLocation+"\n");
@@ -37,8 +35,6 @@ public class CorrectLocal
 				  	String bitHashLocation = quakedata+"/qcb";
 					String CorrectLocation = quakehome+"/src/correct";				
 					String q=CorrectLocation+" -f "+ fastqListLocation + " -k " + Long.toString(K) + " -b "+bitHashLocation;
-					//String q1 ="/usr/local/hadoop/bin/hadoop dfs -copyFromLocal /home/hduser/workspace/QuakeData/426000000_quakesingle.cor.fq ContrailPlus/Quake_Singles_Out/";
-					//String q1 = "touch flag";
 					System.out.println(q);
 
 
@@ -62,34 +58,14 @@ public class CorrectLocal
 						e.printStackTrace();
 					}
 					
-					
-					
-						//BufferedReader bf = new BufferedReader(new InputStreamReader(new FileInputStream(fastqListLocation)));
-						
-						
 						String tempPath = fastqLocation.substring(0,fastqLocation.lastIndexOf('.'));
 						  		  	
 						String correctedFilePath = tempPath + ".cor.fq";
 						
-						//System.out.println(correctedFilePath);
-					
-						//String q1 ="/usr/local/hadoop/bin/hadoop dfs -copyFromLocal /home/hduser/workspace/QuakeData/*.cor.fq ContrailPlus/Quake_Singles_Out";
-						
-						//String q1=hadoophome+"/bin/hadoop dfs -copyFromLocal "+correctedFilePath+" "+"ContrailPlus/Quake_Singles_Out/";
 						try
 						{
 						
-					/*		Process p = Runtime.getRuntime().exec(q1);
-							BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-							System.out.println("correct copy");
-							String s; 
-							while ((s = stdInput.readLine()) != null) {
-								 System.out.println(s);
-							 }
-							int i = p.waitFor();
-							
-							*/
-							 Configuration conf2 = new Configuration();
+				  			    Configuration conf2 = new Configuration();
 							    FileSystem fs = FileSystem.get(conf2);
 							    //Deleting output path if exists
 							    Path fp1 = new Path(correctedFilePath);
@@ -100,8 +76,8 @@ public class CorrectLocal
 						}
 						catch(Exception e){System.out.println(e.toString());}
 					
-					//	File fp = new File(fastqListLocation);  
-					//if(fp.exists())fp.delete();
+						File fp = new File(fastqListLocation);  
+					     if(fp.exists())fp.delete();
 					
 		
 	} 

@@ -1,6 +1,7 @@
 package org.avrotest;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -48,6 +49,16 @@ import java.util.*;
 
 import java.util.Date;
 
+/*
+ * The input to this class is the counts file. 
+ * This counts file is emitted by mappers on their local fs
+ * The local fs contains quake which we have modified to give out 
+ * numeric bithases. These numeric bithashes are generated locally and later
+ * are copied into the common directory on which mapreduce task is run
+ * to get the global numeric bithash. This still needs to be converted into
+ * quakecompatiblebithash.
+ */
+
 public class localBitHash {
 
     public static String Input;
@@ -62,7 +73,6 @@ public class localBitHash {
 			//  
 			  for(int i=0;i<a.size();i++)
 			  {
-				  //System.out.println("Record "+a.get(i));
 				  out.write(a.get(i)+"\n");
 			  }
 			  
@@ -99,10 +109,8 @@ public static class BitHashMapper
 		hadoophome = job.get("hadoophome");
 		K = job.getLong("K", 0);
 		quakehome = job.get("quakehome");
-		//Contrail.msg("VALUE OF K:"+K+" AND CUTOFF:"+cutoff+"\n");
 		temp_arraylist = new ArrayList<String>();
 		
-		//Delete any existing directory with the name as bitout
 		
 		try{
 		
@@ -140,8 +148,7 @@ public static class BitHashMapper
 	    String frequency;
 	    kmer= count_record.key().toString();
 	    frequency = count_record.value().toString();
-	    //System.out.println("Output File "+ out.toString());
-	    //System.out.println(kmer+"\t"+frequency);
+	 
 	    temp_arraylist.add(kmer+"\t"+frequency);
 	    count++;
 	    		
@@ -191,6 +198,12 @@ public static class BitHashMapper
 		    Path fp1 = new Path(filepath+"_out");
 		    Path fp2 = new Path(bitout);
 		    fs.copyFromLocalFile(fp1, fp2);
+		    ///Cleaning up local files
+		    File fp = new File(filepath);
+			if(fp.exists())fp.delete();
+			
+			fp = new File(filepath+"_out");
+			if(fp.exists())fp.delete();
     	}
 		 catch (IOException e) {e.printStackTrace(); }
     

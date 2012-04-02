@@ -201,11 +201,46 @@ public class App
     	
     	if(correctForSingles)
     	{
-    		//Uncomment this after Flash is done
-    		//String paths = ContrailConfig.Singles+","+ContrailConfig.Flash_Final_Out;
+    		
+    		String command = ContrailConfig.Hadoop_Home+"/bin/hadoop dfs -rmr "+ContrailConfig.Quake_Singles_Out;
+         	
+         	try {
+                  
+                  Process p = Runtime.getRuntime().exec(command);
+                  BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                  String s;
+            
+                   while ((s = stdInput.readLine()) != null) {
+                       System.out.print("");
+                   }
+                 
+              } catch (IOException e) {
+                  // TODO Auto-generated catch block
+                  e.printStackTrace();
+              }
+         	
+    		command = ContrailConfig.Hadoop_Home+"/bin/hadoop dfs -mkdir "+ContrailConfig.Quake_Singles_Out;
+         	
+         	try {
+                  
+                  Process p = Runtime.getRuntime().exec(command);
+                  BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                  String s;
+            
+                   while ((s = stdInput.readLine()) != null) {
+                       System.out.print("");
+                   }
+                 
+              } catch (IOException e) {
+                  // TODO Auto-generated catch block
+                  e.printStackTrace();
+              }
+         	
+    		
+    		String paths = ContrailConfig.Singles+","+ContrailConfig.Flash_Final_Out;
     		System.out.println("Running Correct for singles");
 
-    		String paths = ContrailConfig.Singles;
+    		//String paths = ContrailConfig.Singles;
     		CorrectSinglesInvocationStub.run(paths,ContrailConfig.junkPath);
     	}
     	

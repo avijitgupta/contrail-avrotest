@@ -1,6 +1,7 @@
 package org.avrotest;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -48,7 +49,12 @@ import org.avrotest.kmerCounter.KmerCounterReducer;
 import java.util.*;
 
 import java.util.Date;
-
+/*
+ * This class prepares quake run
+ * Mapper -Writes local file after splitting up the joined record that it gets as input
+ * Output files are written in blocks of 1000.
+ * In the close(), correct is run on local files
+ */
 public class createPairedReadsForQuake {
 	final static int MAX= 2;
     public static int cutoff;
@@ -112,9 +118,8 @@ public class createPairedReadsForQuake {
         hadoophome = job.get("hadoophome");
         
         localTime = ""+time;
-        //filePathFq1 = "/home/hduser/workspace/QuakeData/testcorrect_1.fq";
-        //filePathFq1 = "/home/hduser/workspace/QuakeData/testcorrect_1.fq";
         
+        /*Temporary Filenames get their name from the timestamp*/        
 		filePathFq1 = quakedata+"/"+time+"correct_1.fq";
 		filePathFq2 = quakedata+"/"+time+"correct_2.fq";
 		
@@ -122,7 +127,6 @@ public class createPairedReadsForQuake {
 		a1= new ArrayList<String>();
 	    a2= new ArrayList<String>();
 	    count = 0;
-		//System.out.println("cutoff in setup"+cutOff+" "+ Cutoff.cutoff);
 	}
   
 	 public void map(joinedfqrecord joined_record, 
@@ -136,8 +140,6 @@ public class createPairedReadsForQuake {
 		    String seq2 = joined_record.read2.toString();
 		    String qval2 = joined_record.qvalue2.toString();
     
-  //  Text word = new Text();
-    //IntWritable one= new IntWritable(1);
       
     a1.add(seqId+"/1\n"+seq1+"\n"+"+\n"+qval1);
     a2.add(seqId+"/2\n"+seq2+"\n"+"+\n"+qval2);
@@ -164,12 +166,14 @@ public class createPairedReadsForQuake {
     		count = 0;
     	}
     	runCorrectForPairedReads.correctRunner(filePathFq1, filePathFq2, localTime,K, quakehome, quakedata, quake_mates_out,hadoophome);
-    	/*
+    	
+    	//Deleting Local Temporary files created by the mapper
+    	
     	File fp = new File(filePathFq1);
     	if(fp.exists())fp.delete();
     	fp = new File(filePathFq2);
     	if(fp.exists())fp.delete();
-    	*/
+    	
     }
 }
 	public static void createPairedReads(String inputPath, String outputPath) throws Exception 
@@ -189,14 +193,11 @@ public class createPairedReadsForQuake {
 
 	    FileInputFormat.addInputPath(conf, new Path(inputPath));
 	    FileOutputFormat.setOutputPath(conf, new Path(outputPath));
-	    ///Input is the kmer count file in Avro. So we used Kmer count recrod schema
+
+	    /* Input is a joined schema which containes two mate files joined*/
 	    joinedfqrecord read = new joinedfqrecord();
 	    AvroJob.setInputSchema(conf, read.getSchema());
-	   ////We dont require an output from this
-	   // AvroJob.setMapOutputSchema(conf, read.getSchema());
-	    
-	   // AvroJob.setReducerClass(conf, KmerCounterReducer.class);
-	       
+	   	       
 	    //Map Only Job
 	    conf.setNumReduceTasks(0);
 	 // Delete the output directory if it exists already

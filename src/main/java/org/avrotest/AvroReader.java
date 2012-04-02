@@ -39,7 +39,7 @@ import org.apache.avro.file.DataFileReader;
 /** Tests mapred API with a specific record. */
 
 public class AvroReader {
-
+/*
 	//public static final Schema schema; 
 	public static final Schema IN_SCHEMA = ReflectData.get().getSchema(FqRecord.class);
 	 public static final Schema MAP_OUT_SCHEMA = 
@@ -73,11 +73,11 @@ public class AvroReader {
     
 	System.out.println("AvroReaderRunner");
   
-	/*
+	//////////////
 	Job job = new Job(conf,"AvroRecord Job..");
     job.setJobName("avroreader");	
     job.setJarByClass(AvroReader.class);
-	*/
+	/////////////////
     
 
 
@@ -120,5 +120,5 @@ public class AvroReader {
     }
 	
   }
-
+*/
 }
